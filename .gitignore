@@ -1,0 +1,22 @@
+# Environment files
+.env
+.env.*
+!.env.example
+!.env.production
+
+# Dependencies
+node_modules/
+
+# 
+# Build output
+dist/
+dist-ssr/
+
+# IDE
+.vscode/
+.idea/
+backup/
+
+# Logs
+*.log
+npm-debug.log*
