@@ -378,32 +378,29 @@ export default function SignupForm({
         REGISTER
     ========================================= */}
 
-    <Button
+    <button
       type="submit"
       disabled={loading}
       className="
-        mt-2
-        h-14
-        w-full
-        rounded-2xl
-        bg-gradient-to-r
-        from-blue-600
-        via-indigo-500
-        to-cyan-500
-        text-base
-        font-semibold
-        text-white
-        shadow-[0_12px_35px_rgba(37,99,235,0.45)]
-        transition-all
-        duration-300
-        hover:-translate-y-1
-        hover:scale-[1.02]
-        hover:shadow-[0_18px_45px_rgba(37,99,235,0.60)]
-        active:scale-[0.98]
+        mt-2 w-full h-12 rounded-xl font-semibold text-sm text-white
+        bg-gradient-to-r from-blue-600 via-indigo-600 to-cyan-500
+        shadow-[0_8px_30px_rgba(79,70,229,0.35)]
+        hover:shadow-[0_12px_35px_rgba(79,70,229,0.50)]
+        hover:scale-[1.01] active:scale-[0.99]
+        transition-all duration-300
+        flex items-center justify-center gap-2
+        disabled:opacity-60 disabled:cursor-not-allowed disabled:scale-100
       "
     >
-      {loading ? "Creating Account..." : "Create Account"}
-    </Button>
+      {loading ? (
+        <>
+          <div className="h-4 w-4 animate-spin rounded-full border-2 border-white border-t-transparent" />
+          <span>Creating Account...</span>
+        </>
+      ) : (
+        "Create Account"
+      )}
+    </button>
 
   </div>
 );

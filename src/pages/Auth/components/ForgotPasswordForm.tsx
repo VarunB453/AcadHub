@@ -1,41 +1,16 @@
-import {
-  Mail,
-  Lock,
-} from "lucide-react";
-
-import { Button } from "@/components/ui/button";
-
+import { Mail, Lock, KeyRound } from "lucide-react";
 import AuthInput from "./AuthInput";
 import CaptchaField from "./CaptchaField";
-
-import type {
-  SignupFormData,
-} from "../types";
+import type { SignupFormData } from "../types";
 
 interface ForgotPasswordFormProps {
   form: SignupFormData;
-
   loading: boolean;
-
-  updateField: <
-    K extends keyof SignupFormData
-  >(
-    key: K,
-    value: SignupFormData[K]
-  ) => void;
-
+  updateField: <K extends keyof SignupFormData>(key: K, value: SignupFormData[K]) => void;
   captcha: {
-    captcha: {
-      question: string;
-      answer: string;
-    };
-
+    captcha: { question: string; answer: string };
     answer: string;
-
-    setAnswer: (
-      value: string
-    ) => void;
-
+    setAnswer: (value: string) => void;
     refresh: () => void;
   };
 }
@@ -47,89 +22,61 @@ export default function ForgotPasswordForm({
   captcha,
 }: ForgotPasswordFormProps) {
   return (
-    <div
-      className="
-        space-y-6
-        animate-in
-        fade-in-50
-        slide-in-from-bottom-4
-        duration-500
-      "
-    >
+    <div className="space-y-4">
       {/* Email */}
-
       <AuthInput
         label="Email Address"
         icon={Mail}
         value={form.email}
-        placeholder="Enter your email"
-        onChange={(value) =>
-          updateField(
-            "email",
-            value
-          )
-        }
+        placeholder="Enter your registered email"
+        onChange={(value) => updateField("email", value)}
       />
 
       {/* New Password */}
-
       <AuthInput
         label="New Password"
         type="password"
         icon={Lock}
         value={form.password}
         placeholder="Enter your new password"
-        onChange={(value) =>
-          updateField(
-            "password",
-            value
-          )
-        }
+        onChange={(value) => updateField("password", value)}
       />
 
       {/* Verification */}
-
       <CaptchaField
-        captcha={
-          captcha.captcha
-        }
-        answer={
-          captcha.answer
-        }
-        setAnswer={
-          captcha.setAnswer
-        }
-        refresh={
-          captcha.refresh
-        }
+        captcha={captcha.captcha}
+        answer={captcha.answer}
+        setAnswer={captcha.setAnswer}
+        refresh={captcha.refresh}
       />
 
       {/* Reset Button */}
-
-      <Button
+      <button
         type="submit"
         disabled={loading}
         className="
-          h-12
-          w-full
-          rounded-xl
-          bg-gradient-to-r
-          from-blue-600
-          to-cyan-500
-          text-white
-          shadow-xl
-          transition-all
-          duration-300
-          hover:scale-[1.02]
-          hover:from-blue-500
-          hover:to-cyan-400
+          mt-2 w-full h-12 rounded-xl font-semibold text-sm text-white
+          bg-gradient-to-r from-blue-600 via-indigo-600 to-cyan-500
+          shadow-[0_8px_30px_rgba(79,70,229,0.35)]
+          hover:shadow-[0_12px_35px_rgba(79,70,229,0.50)]
+          hover:scale-[1.01] active:scale-[0.99]
+          transition-all duration-300
+          flex items-center justify-center gap-2
+          disabled:opacity-60 disabled:cursor-not-allowed disabled:scale-100
         "
       >
-        {loading
-          ? "Resetting Password..."
-          : "Reset Password"}
-      </Button>
-
+        {loading ? (
+          <>
+            <div className="h-4 w-4 animate-spin rounded-full border-2 border-white border-t-transparent" />
+            <span>Resetting...</span>
+          </>
+        ) : (
+          <>
+            <KeyRound className="w-4 h-4" />
+            <span>Reset Password</span>
+          </>
+        )}
+      </button>
     </div>
   );
 }
