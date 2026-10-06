@@ -1,5 +1,4 @@
 import { useState } from "react";
-import { Button } from "@/components/ui/button";
 import AuthInput from "./AuthInput";
 import {
   Mail,
@@ -12,11 +11,11 @@ import {
   Eye,
   EyeOff,
   Sparkles,
+  ChevronRight,
 } from "lucide-react";
 import type { SignupFormData } from "../types";
 
 type DemoRole = "student" | "faculty" | "admin";
-
 interface DemoCredentials {
   email: string;
   password: string;
@@ -25,27 +24,15 @@ interface DemoCredentials {
 interface LoginFormProps {
   form: SignupFormData;
   loading: boolean;
-  updateField: <K extends keyof SignupFormData>(
-    key: K,
-    value: SignupFormData[K]
-  ) => void;
+  updateField: <K extends keyof SignupFormData>(key: K, value: SignupFormData[K]) => void;
   onForgotPassword: () => void;
   onExploreDemo?: (role: DemoRole, credentials: DemoCredentials) => void;
 }
 
 const DEMO_ACCOUNTS: Record<DemoRole, DemoCredentials> = {
-  student: {
-    email: "demo.student@acadhub.demo",
-    password: "AcadHub@Demo2026",
-  },
-  faculty: {
-    email: "demo.faculty@acadhub.demo",
-    password: "AcadHub@Demo2026",
-  },
-  admin: {
-    email: "demo.admin@acadhub.demo",
-    password: "AcadHub@Demo2026",
-  },
+  student: { email: "demo.student@acadhub.demo", password: "AcadHub@Demo2026" },
+  faculty: { email: "demo.faculty@acadhub.demo", password: "AcadHub@Demo2026" },
+  admin: { email: "demo.admin@acadhub.demo", password: "AcadHub@Demo2026" },
 };
 
 const DEMO_ROLES = [
@@ -54,18 +41,24 @@ const DEMO_ROLES = [
     title: "Student Demo",
     description: "Explore student dashboard, courses & attendance.",
     icon: GraduationCap,
+    color: "text-cyan-400",
+    bg: "bg-cyan-500/10 border-cyan-500/20",
   },
   {
     role: "faculty" as DemoRole,
     title: "Faculty Demo",
     description: "Explore class grading, attendance & reports.",
     icon: Users,
+    color: "text-emerald-400",
+    bg: "bg-emerald-500/10 border-emerald-500/20",
   },
   {
     role: "admin" as DemoRole,
     title: "Admin Demo",
     description: "Explore full campus administration & analytics.",
     icon: ShieldCheck,
+    color: "text-violet-400",
+    bg: "bg-violet-500/10 border-violet-500/20",
   },
 ];
 
@@ -110,13 +103,8 @@ export default function LoginForm({
   };
 
   const handleDemoLogin = () => {
-    if (!demoRole || !demoEmail.trim() || !demoPassword.trim()) {
-      return;
-    }
-    onExploreDemo?.(demoRole, {
-      email: demoEmail.trim(),
-      password: demoPassword,
-    });
+    if (!demoRole || !demoEmail.trim() || !demoPassword.trim()) return;
+    onExploreDemo?.(demoRole, { email: demoEmail.trim(), password: demoPassword });
   };
 
   return (
@@ -131,194 +119,129 @@ export default function LoginForm({
       />
 
       {/* Password */}
-      <div className="space-y-1">
+      <div>
         <AuthInput
           label="Password"
           type="password"
-          placeholder="••••••••"
+          placeholder="Enter your password"
           value={form.password}
           icon={Lock}
           onChange={(value) => updateField("password", value)}
         />
-        <div className="flex justify-end pt-1">
+        <div className="flex justify-end mt-1.5">
           <button
             type="button"
             onClick={onForgotPassword}
-            className="text-xs font-medium text-cyan-400 hover:text-cyan-300 transition-colors hover:underline"
+            className="text-[11px] font-semibold text-cyan-400/80 hover:text-cyan-300 transition-colors hover:underline"
           >
             Forgot Password?
           </button>
         </div>
       </div>
 
-      {/* Login Button */}
-      <Button
+      {/* Sign In Button */}
+      <button
         type="submit"
         disabled={loading}
         className="
-          mt-3
-          h-12
-          w-full
-          rounded-xl
-          bg-gradient-to-r
-          from-blue-600
-          via-indigo-600
-          to-cyan-500
-          text-sm
-          font-semibold
-          text-white
-          shadow-[0_8px_25px_rgba(79,70,229,0.35)]
-          transition-all
-          duration-300
-          hover:scale-[1.01]
-          hover:shadow-[0_12px_30px_rgba(79,70,229,0.5)]
-          active:scale-[0.99]
-          border border-white/20
+          mt-2 w-full h-12 rounded-xl font-semibold text-sm text-white
+          bg-gradient-to-r from-blue-600 via-indigo-600 to-cyan-500
+          shadow-[0_8px_30px_rgba(79,70,229,0.35)]
+          hover:shadow-[0_12px_35px_rgba(79,70,229,0.50)]
+          hover:scale-[1.01] active:scale-[0.99]
+          transition-all duration-300
+          flex items-center justify-center gap-2
+          disabled:opacity-60 disabled:cursor-not-allowed disabled:scale-100
         "
       >
         {loading ? (
-          <div className="flex items-center gap-2">
+          <>
             <div className="h-4 w-4 animate-spin rounded-full border-2 border-white border-t-transparent" />
             <span>Signing In...</span>
-          </div>
+          </>
         ) : (
-          <div className="flex items-center justify-center gap-2">
+          <>
             <span>Sign In to Dashboard</span>
             <Sparkles className="w-4 h-4 text-cyan-300" />
-          </div>
+          </>
         )}
-      </Button>
+      </button>
 
-      {/* Demo Divider */}
-      <div className="relative py-2">
+      {/* Divider */}
+      <div className="relative py-1">
         <div className="absolute inset-0 flex items-center">
-          <div className="w-full border-t border-white/10" />
+          <div className="w-full border-t border-white/[0.08]" />
         </div>
         <div className="relative flex justify-center">
-          <span className="bg-slate-900/80 px-3 text-[10px] font-semibold uppercase tracking-wider text-slate-400 rounded-full border border-white/5">
-            or try instant demo
+          <span className="px-3 text-[10px] font-bold uppercase tracking-widest text-slate-500 bg-[#0e1422]">
+            or explore demo
           </span>
         </div>
       </div>
 
       {/* Demo Button */}
-      <Button
+      <button
         type="button"
-        variant="outline"
         onClick={openDemo}
         disabled={loading}
         className="
-          group
-          h-11
-          w-full
-          rounded-xl
-          border
-          border-cyan-500/30
-          bg-cyan-500/10
-          text-sm
-          font-medium
-          text-cyan-200
-          backdrop-blur-md
-          transition-all
-          duration-300
-          hover:border-cyan-400/60
-          hover:bg-cyan-500/20
-          hover:text-white
-          hover:shadow-[0_0_20px_rgba(6,182,212,0.2)]
+          group w-full h-11 rounded-xl font-medium text-sm
+          border border-cyan-500/25 bg-cyan-500/[0.07] text-cyan-300
+          hover:border-cyan-400/50 hover:bg-cyan-500/15 hover:text-white
+          hover:shadow-[0_0_24px_rgba(6,182,212,0.15)]
+          transition-all duration-300 flex items-center justify-center gap-2
+          disabled:opacity-50 disabled:cursor-not-allowed
         "
       >
-        <Rocket className="mr-2 h-4 w-4 text-cyan-400 group-hover:scale-110 transition-transform" />
-        Explore Interactive Demo Mode
-      </Button>
+        <Rocket className="w-4 h-4 group-hover:scale-110 transition-transform" />
+        <span>Explore Interactive Demo Mode</span>
+      </button>
 
-      {/* DEMO MODAL */}
+      {/* ── DEMO MODAL ── */}
       {demoOpen && (
         <div
-          className="
-            fixed
-            inset-0
-            z-[100]
-            flex
-            items-center
-            justify-center
-            bg-slate-950/80
-            px-4
-            backdrop-blur-md
-            animate-in fade-in duration-200
-          "
+          className="fixed inset-0 z-[100] flex items-center justify-center bg-black/70 px-4 backdrop-blur-md animate-in fade-in duration-200"
           onClick={closeDemo}
         >
           <div
-            className="
-              w-full
-              max-w-md
-              rounded-3xl
-              border
-              border-white/15
-              bg-slate-900/95
-              p-6
-              text-white
-              shadow-2xl shadow-indigo-500/20
-              backdrop-blur-2xl
-            "
-            onClick={(event) => event.stopPropagation()}
+            className="w-full max-w-md rounded-2xl border border-white/10 bg-[#0e1422]/95 p-6 text-white shadow-2xl shadow-black/50 backdrop-blur-2xl"
+            onClick={(e) => e.stopPropagation()}
           >
-            {/* Header */}
-            <div className="mb-5">
-              <div className="flex items-center gap-3 mb-2">
-                <div className="p-2.5 rounded-xl bg-cyan-500/15 border border-cyan-500/30 text-cyan-400">
-                  <Rocket className="h-5 w-5" />
-                </div>
-                <div>
-                  <h3 className="text-lg font-bold text-white">Explore AcadHub Demo</h3>
-                  <p className="text-xs text-slate-400">Choose a pre-configured demo persona</p>
-                </div>
+            {/* Modal Header */}
+            <div className="flex items-center gap-3 mb-5">
+              <div className="p-2.5 rounded-xl bg-cyan-500/10 border border-cyan-500/20 text-cyan-400">
+                <Rocket className="h-5 w-5" />
+              </div>
+              <div>
+                <h3 className="text-base font-bold text-white">Explore AcadHub Demo</h3>
+                <p className="text-xs text-slate-400 mt-0.5">Choose a pre-configured demo persona</p>
               </div>
             </div>
 
-            {/* ROLE SELECTION */}
+            {/* Role Selection */}
             {demoStep === "role" && (
-              <div className="space-y-2.5">
-                {DEMO_ROLES.map(({ role, title, description, icon: Icon }) => (
+              <div className="space-y-2">
+                {DEMO_ROLES.map(({ role, title, description, icon: Icon, color, bg }) => (
                   <button
                     key={role}
                     type="button"
                     onClick={() => selectDemoRole(role)}
-                    className="
-                      group
-                      flex
-                      w-full
-                      items-center
-                      gap-3.5
-                      rounded-2xl
-                      border
-                      border-white/10
-                      bg-slate-950/50
-                      p-3.5
-                      text-left
-                      transition-all
-                      duration-200
-                      hover:border-cyan-400/50
-                      hover:bg-cyan-500/10
-                    "
+                    className="group flex w-full items-center gap-3.5 rounded-xl border border-white/[0.07] bg-white/[0.03] p-3.5 text-left transition-all duration-200 hover:border-white/20 hover:bg-white/[0.06]"
                   >
-                    <div className="p-2.5 rounded-xl bg-slate-900 border border-white/10 text-cyan-400 group-hover:scale-110 transition-transform">
+                    <div className={`p-2.5 rounded-xl border ${bg} ${color} group-hover:scale-110 transition-transform`}>
                       <Icon className="h-5 w-5" />
                     </div>
-                    <div>
-                      <p className="font-semibold text-sm text-white group-hover:text-cyan-300">
-                        {title}
-                      </p>
-                      <p className="text-xs text-slate-400 mt-0.5">
-                        {description}
-                      </p>
+                    <div className="flex-1">
+                      <p className={`font-semibold text-sm text-white group-hover:${color} transition-colors`}>{title}</p>
+                      <p className="text-xs text-slate-500 mt-0.5">{description}</p>
                     </div>
+                    <ChevronRight className="h-4 w-4 text-slate-600 group-hover:text-slate-400 transition-colors" />
                   </button>
                 ))}
               </div>
             )}
 
-            {/* CREDENTIALS STEP */}
+            {/* Credentials Step */}
             {demoStep === "credentials" && demoRole && (
               <div className="space-y-4">
                 <button
@@ -330,29 +253,29 @@ export default function LoginForm({
                   <span>Change Persona</span>
                 </button>
 
-                <div className="rounded-xl border border-cyan-500/30 bg-cyan-500/10 p-3">
-                  <p className="text-[10px] uppercase font-bold tracking-wider text-cyan-300">
+                <div className="rounded-xl border border-cyan-500/20 bg-cyan-500/[0.07] px-4 py-3">
+                  <p className="text-[10px] uppercase font-bold tracking-wider text-cyan-300/70">
                     Selected Demo Account
                   </p>
-                  <p className="text-base font-semibold text-white mt-0.5">
-                    {DEMO_ROLES.find((item) => item.role === demoRole)?.title}
+                  <p className="text-base font-bold text-white mt-0.5">
+                    {DEMO_ROLES.find((r) => r.role === demoRole)?.title}
                   </p>
                 </div>
 
                 <div className="space-y-3">
                   <div>
-                    <label className="block text-xs font-semibold text-slate-300 mb-1">
+                    <label className="block text-[11px] font-bold uppercase tracking-wider text-slate-400 mb-1.5">
                       Demo Email
                     </label>
                     <input
                       type="email"
                       value={demoEmail}
                       onChange={(e) => setDemoEmail(e.target.value)}
-                      className="w-full h-10 px-3 rounded-lg border border-white/10 bg-slate-950/60 text-sm text-white focus:border-cyan-400 outline-none"
+                      className="w-full h-10 px-3 rounded-xl border border-white/[0.09] bg-white/[0.04] text-sm text-white outline-none focus:border-cyan-400/60 focus:ring-2 focus:ring-cyan-400/15 transition-all"
                     />
                   </div>
                   <div>
-                    <label className="block text-xs font-semibold text-slate-300 mb-1">
+                    <label className="block text-[11px] font-bold uppercase tracking-wider text-slate-400 mb-1.5">
                       Demo Password
                     </label>
                     <div className="relative">
@@ -360,12 +283,12 @@ export default function LoginForm({
                         type={showDemoPassword ? "text" : "password"}
                         value={demoPassword}
                         onChange={(e) => setDemoPassword(e.target.value)}
-                        className="w-full h-10 px-3 pr-10 rounded-lg border border-white/10 bg-slate-950/60 text-sm text-white focus:border-cyan-400 outline-none"
+                        className="w-full h-10 px-3 pr-10 rounded-xl border border-white/[0.09] bg-white/[0.04] text-sm text-white outline-none focus:border-cyan-400/60 focus:ring-2 focus:ring-cyan-400/15 transition-all"
                       />
                       <button
                         type="button"
                         onClick={() => setShowDemoPassword((prev) => !prev)}
-                        className="absolute right-2.5 top-1/2 -translate-y-1/2 text-slate-400 hover:text-white"
+                        className="absolute right-2.5 top-1/2 -translate-y-1/2 text-slate-500 hover:text-white transition-colors"
                       >
                         {showDemoPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
                       </button>
@@ -373,22 +296,22 @@ export default function LoginForm({
                   </div>
                 </div>
 
-                <Button
+                <button
                   type="button"
                   disabled={loading || !demoEmail.trim() || !demoPassword.trim()}
                   onClick={handleDemoLogin}
-                  className="w-full h-11 rounded-xl bg-gradient-to-r from-blue-600 via-indigo-600 to-cyan-500 font-semibold text-white shadow-lg"
+                  className="w-full h-11 rounded-xl bg-gradient-to-r from-blue-600 via-indigo-600 to-cyan-500 font-semibold text-sm text-white shadow-lg flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed hover:shadow-[0_8px_25px_rgba(79,70,229,0.40)] transition-all"
                 >
-                  <Rocket className="mr-2 h-4 w-4" />
+                  <Rocket className="h-4 w-4" />
                   Launch Demo Session
-                </Button>
+                </button>
               </div>
             )}
 
             <button
               type="button"
               onClick={closeDemo}
-              className="mt-4 w-full text-center text-xs text-slate-400 hover:text-white transition-colors"
+              className="mt-4 w-full text-center text-xs text-slate-500 hover:text-slate-300 transition-colors"
             >
               Cancel
             </button>

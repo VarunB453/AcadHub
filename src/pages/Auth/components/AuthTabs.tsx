@@ -1,4 +1,3 @@
-import { Button } from "@/components/ui/button";
 import { LogIn, UserPlus } from "lucide-react";
 
 interface AuthTabsProps {
@@ -17,54 +16,40 @@ export default function AuthTabs({
   const isAdminSignupDisabled = selectedRole === "admin";
 
   return (
-    <div className="relative flex rounded-2xl border border-white/10 bg-slate-950/40 p-1.5 backdrop-blur-xl mb-6 shadow-inner">
-      <Button
+    <div className="relative flex rounded-xl border border-white/[0.08] bg-white/[0.03] p-1 mb-6 gap-1">
+      <button
         type="button"
         onClick={() => switchMode("login")}
         className={`
-          flex-1
-          h-11
-          rounded-xl
-          font-medium
-          text-sm
-          flex items-center justify-center gap-2
-          transition-all
-          duration-300
+          flex-1 flex items-center justify-center gap-2 h-10 rounded-lg text-sm font-semibold transition-all duration-300
           ${
             isLogin
-              ? "bg-gradient-to-r from-blue-600 via-indigo-600 to-cyan-500 text-white shadow-lg shadow-indigo-500/25 border border-white/10"
-              : "bg-transparent text-slate-300 hover:text-white hover:bg-white/5"
+              ? "bg-gradient-to-r from-indigo-600 via-blue-600 to-cyan-500 text-white shadow-lg shadow-indigo-500/30"
+              : "text-slate-400 hover:text-white hover:bg-white/[0.05]"
           }
         `}
       >
         <LogIn className="w-4 h-4" />
         <span>Sign In</span>
-      </Button>
+      </button>
 
-      <Button
+      <button
         type="button"
         disabled={isAdminSignupDisabled}
         onClick={() => switchMode("signup")}
         className={`
-          flex-1
-          h-11
-          rounded-xl
-          font-medium
-          text-sm
-          flex items-center justify-center gap-2
-          transition-all
-          duration-300
+          flex-1 flex items-center justify-center gap-2 h-10 rounded-lg text-sm font-semibold transition-all duration-300
           ${
             isSignup
-              ? "bg-gradient-to-r from-blue-600 via-indigo-600 to-cyan-500 text-white shadow-lg shadow-indigo-500/25 border border-white/10"
-              : "bg-transparent text-slate-300 hover:text-white hover:bg-white/5"
+              ? "bg-gradient-to-r from-indigo-600 via-blue-600 to-cyan-500 text-white shadow-lg shadow-indigo-500/30"
+              : "text-slate-400 hover:text-white hover:bg-white/[0.05]"
           }
-          ${isAdminSignupDisabled ? "opacity-40 cursor-not-allowed" : ""}
+          ${isAdminSignupDisabled ? "opacity-40 cursor-not-allowed" : "cursor-pointer"}
         `}
       >
         <UserPlus className="w-4 h-4" />
         <span>Register</span>
-      </Button>
+      </button>
     </div>
   );
 }
