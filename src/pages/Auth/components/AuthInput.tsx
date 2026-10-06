@@ -24,13 +24,13 @@ export default function AuthInput({
   const inputType = isPassword && showPassword ? "text" : type;
 
   return (
-    <div className="space-y-1.5">
-      <label className="block text-[11px] font-bold uppercase tracking-wider text-slate-400">
+    <div className="space-y-1">
+      <label className="block text-[10px] font-bold uppercase tracking-wider text-slate-400">
         {label}
       </label>
 
       <div className="relative group">
-        <Icon className="absolute left-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-500 group-focus-within:text-cyan-400 transition-colors duration-200 pointer-events-none" />
+        <Icon className="absolute left-3 top-1/2 h-3.5 w-3.5 -translate-y-1/2 text-slate-500 group-focus-within:text-cyan-400 transition-colors duration-200 pointer-events-none" />
 
         <input
           type={inputType}
@@ -38,8 +38,8 @@ export default function AuthInput({
           placeholder={placeholder}
           onChange={(e) => onChange(e.target.value)}
           className={`
-            w-full h-11 rounded-xl border border-white/[0.09] bg-white/[0.04]
-            pl-11 ${isPassword ? "pr-11" : "pr-4"} text-sm text-white
+            w-full h-9 rounded-xl border border-white/[0.09] bg-white/[0.04]
+            pl-9 ${isPassword ? "pr-9" : "pr-3"} text-xs sm:text-sm text-white
             placeholder:text-slate-600
             outline-none transition-all duration-200
             focus:border-cyan-400/60 focus:bg-white/[0.07] focus:ring-2 focus:ring-cyan-400/15
@@ -50,13 +50,13 @@ export default function AuthInput({
           <button
             type="button"
             onClick={() => setShowPassword((prev) => !prev)}
-            className="absolute right-3 top-1/2 -translate-y-1/2 flex items-center justify-center w-7 h-7 rounded-lg text-slate-500 hover:text-cyan-300 hover:bg-white/10 transition-all duration-200"
+            className="absolute right-2.5 top-1/2 -translate-y-1/2 flex items-center justify-center w-6 h-6 rounded-md text-slate-500 hover:text-cyan-300 hover:bg-white/10 transition-all duration-200"
             aria-label={showPassword ? "Hide password" : "Show password"}
           >
             {showPassword ? (
-              <EyeOff className="h-4 w-4" />
+              <EyeOff className="h-3.5 w-3.5" />
             ) : (
-              <Eye className="h-4 w-4" />
+              <Eye className="h-3.5 w-3.5" />
             )}
           </button>
         )}

@@ -16,20 +16,20 @@ export default function AuthTabs({
   const isAdminSignupDisabled = selectedRole === "admin";
 
   return (
-    <div className="relative flex rounded-xl border border-white/[0.08] bg-white/[0.03] p-1 mb-6 gap-1">
+    <div className="relative flex rounded-xl border border-white/[0.08] bg-white/[0.03] p-0.5 mb-3 gap-1">
       <button
         type="button"
         onClick={() => switchMode("login")}
         className={`
-          flex-1 flex items-center justify-center gap-2 h-10 rounded-lg text-sm font-semibold transition-all duration-300
+          flex-1 flex items-center justify-center gap-1.5 h-8 sm:h-8.5 rounded-lg text-xs font-semibold transition-all duration-300
           ${
             isLogin
-              ? "bg-gradient-to-r from-indigo-600 via-blue-600 to-cyan-500 text-white shadow-lg shadow-indigo-500/30"
+              ? "bg-gradient-to-r from-indigo-600 via-blue-600 to-cyan-500 text-white shadow-md shadow-indigo-500/25"
               : "text-slate-400 hover:text-white hover:bg-white/[0.05]"
           }
         `}
       >
-        <LogIn className="w-4 h-4" />
+        <LogIn className="w-3.5 h-3.5" />
         <span>Sign In</span>
       </button>
 
@@ -38,16 +38,16 @@ export default function AuthTabs({
         disabled={isAdminSignupDisabled}
         onClick={() => switchMode("signup")}
         className={`
-          flex-1 flex items-center justify-center gap-2 h-10 rounded-lg text-sm font-semibold transition-all duration-300
+          flex-1 flex items-center justify-center gap-1.5 h-8 sm:h-8.5 rounded-lg text-xs font-semibold transition-all duration-300
           ${
             isSignup
-              ? "bg-gradient-to-r from-indigo-600 via-blue-600 to-cyan-500 text-white shadow-lg shadow-indigo-500/30"
+              ? "bg-gradient-to-r from-indigo-600 via-blue-600 to-cyan-500 text-white shadow-md shadow-indigo-500/25"
               : "text-slate-400 hover:text-white hover:bg-white/[0.05]"
           }
           ${isAdminSignupDisabled ? "opacity-40 cursor-not-allowed" : "cursor-pointer"}
         `}
       >
-        <UserPlus className="w-4 h-4" />
+        <UserPlus className="w-3.5 h-3.5" />
         <span>Register</span>
       </button>
     </div>
