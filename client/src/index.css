@@ -1,0 +1,16 @@
+:root {
+  color-scheme: light;
+  font-family: Inter, system-ui, sans-serif;
+  line-height: 1.5;
+  font-weight: 400;
+}
+
+body {
+  margin: 0;
+  background: #f4f7fb;
+  color: #101828;
+}
+
+* {
+  box-sizing: border-box;
+}
