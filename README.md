@@ -1,433 +1,255 @@
+# AcadHub
 
-<h1 align="center"> AcadHub</h1>
+**An AI-assisted campus management platform for students, faculty, and administrators.**
 
-<h3 align="center">Your Campus. Connected. Smarter. Better.</h3>
+AcadHub brings common academic workflows into one web application, including attendance, student and faculty records, courses, notices, events, complaints, registration approvals, and analytics. It uses a React/TypeScript frontend, a Node.js API, MongoDB, and an optional Groq-powered AI assistant.
 
+[Repository](https://github.com/VarunB453/AcadHub) · [Issues](https://github.com/VarunB453/AcadHub/issues)
 
-<p align="center">
-  <strong>An AI-Enabled Campus Management System</strong>
-  <br />
-  Bringing students, faculty, and administrators together through one unified digital campus.
-</p>
+## Contents
 
-<p align="center">
-  <a href="https://github.com/VarunB453/AcadHub">
-    <img src="https://img.shields.io/badge/Project-AcadHub-6366F1?style=for-the-badge&logo=github&logoColor=white" alt="AcadHub Repository" />
-  </a>
-  <img src="https://img.shields.io/badge/React-18-61DAFB?style=for-the-badge&logo=react&logoColor=black" alt="React 18" />
-  <img src="https://img.shields.io/badge/TypeScript-5.8-3178C6?style=for-the-badge&logo=typescript&logoColor=white" alt="TypeScript" />
-  <img src="https://img.shields.io/badge/Node.js-ES_Modules-339933?style=for-the-badge&logo=nodedotjs&logoColor=white" alt="Node.js" />
-  <img src="https://img.shields.io/badge/MongoDB-Database-47A248?style=for-the-badge&logo=mongodb&logoColor=white" alt="MongoDB" />
-</p>
+- [Features](#-features)
+- [Technology stack](#-technology-stack)
+- [Prerequisites](#-prerequisites)
+- [Getting started](#-getting-started)
+- [Environment variables](#-environment-variables)
+- [Development commands](#-development-commands)
+- [API health check](#-api-health-check)
+- [Project structure](#-project-structure)
+- [Testing and code quality](#-testing-and-code-quality)
+- [Docker status](#-docker-status)
+- [Security notes](#-security-notes)
+- [Contributing](#-contributing)
+- [License](#-license)
 
-<p align="center">
-  <a href="#-about-acadhub">About</a> •
-  <a href="#-features">Features</a> •
-  <a href="#-technology-stack">Tech Stack</a> •
-  <a href="#-getting-started">Get Started</a> •
-  <a href="#-contributing">Contributing</a>
-</p>
+## ✨ Features
 
----
+### Role-based campus workflows
 
-## 🌟 About AcadHub
+- **Student experience:** dashboard, attendance, notices, events, complaints, and account settings.
+- **Faculty tools:** student and course management, attendance workflows, attendance analytics, file uploads, and registration-request review.
+- **Administrator tools:** faculty management, registration approvals, campus analytics, and oversight of academic records.
+- **Shared modules:** authentication, role-protected pages, notices, events, complaints, settings, and dashboard views.
 
-**AcadHub** is a modern campus management platform designed to simplify academic administration and improve collaboration across an educational institution.
+### AI assistant
 
-From attendance tracking and assignment management to campus announcements, events, and AI-assisted interactions, AcadHub brings essential academic workflows into a centralized digital environment.
+- Chat interface backed by the Groq Chat Completions API.
+- Context-aware responses for supported student, faculty, and attendance intents.
+- Requires a `GROQ_API_KEY`; the rest of the application can be developed without configuring AI, but AI requests will not work.
 
-The goal is simple: **less administrative complexity, better access to information, and a more connected campus experience.**
+> **Implementation note:** the backend currently marks the AI notice and event context tools as “coming soon.” Feature availability may evolve as the project develops.
 
-### 💡 Why AcadHub?
+### Application and data layer
 
-- 🎓 **Student-Centric:** Access essential academic information and campus services from one place.
-- 👨‍🏫 **Faculty-Friendly:** Simplify attendance, assignments, student management, and announcements.
-- 🏛️ **Administration-Ready:** Organize academic records, registrations, departments, and campus operations.
-- 🤖 **AI-Enabled:** Support intelligent campus interactions through AI-oriented functionality.
-- 🔐 **Security-Conscious:** Use authentication and role-based access patterns to separate user responsibilities.
-- 📊 **Data-Informed:** Present academic information through dashboards, reports, and analytics-oriented interfaces.
+- JWT-based authentication helpers and hashed passwords.
+- Registration requests that remain pending until approved.
+- MongoDB persistence and indexes for key records.
+- File uploads handled by Multer.
+- Analytics views and a JSON API.
 
----
+## 🧰 Technology stack
 
-## ✨ Features at a Glance
+| Area | Technologies |
+| --- | --- |
+| Frontend | React 18, TypeScript, Vite, React Router |
+| UI and styling | Tailwind CSS, shadcn/ui components, Radix UI, Lucide icons |
+| Data fetching and charts | TanStack Query, Recharts |
+| Backend | Node.js 20+, native `node:http` server, JavaScript ES modules |
+| Database | MongoDB with the official Node.js driver |
+| Authentication and uploads | JWT helpers, password hashing, Multer |
+| AI integration | Groq Chat Completions API |
+| Tooling | ESLint, Vitest, Testing Library, GitHub Actions |
 
-| Module | Capabilities |
-|---|---|
-| 🎓 Student Portal | Dashboard, attendance, assignments, events, notices, complaints, and profile management |
-| 👨‍🏫 Faculty Portal | Attendance management, assignments, student management, events, and notices |
-| 🏛️ Admin Portal | Student and faculty administration, courses, departments, registrations, and system management |
-| 📊 Analytics | Dashboard insights, attendance analytics, and reporting interfaces |
-| 📢 Campus Communication | Notice board, events, and notifications |
-| 🤖 AI Assistance | AI chat assistant and campus-oriented queries |
-| 🔐 Authentication | Login, role-based access, registration approval, and password-related workflows |
-| ⚙️ Account Settings | Profile management and security settings |
+The API uses Node's built-in HTTP server; it does **not** use Express in the current implementation.
 
-### 🎓 Student Experience
+## ✅ Prerequisites
 
-A centralized workspace for everyday academic activities.
+Install the following before starting:
 
-- View the student dashboard.
-- Track attendance.
-- Access and submit assignments.
-- Read campus notices.
-- Explore events.
-- Submit complaints.
-- Interact with the AI assistant.
-- Review profile information and notifications.
+- **Node.js 20 or newer** and npm.
+- **MongoDB**, either running locally or available through a MongoDB connection URI.
+- A **Groq API key** only if you want to use the AI assistant. Create/manage it through the [Groq Console](https://console.groq.com/).
 
-### 👨‍🏫 Faculty Workspace
+## 🚀 Getting started
 
-Tools designed to support teaching and academic coordination.
-
-- Manage attendance records.
-- Create and manage assignments.
-- Access student information.
-- Publish notices.
-- Manage academic events.
-- Review dashboard information and analytics.
-- Maintain profile and account settings.
-
-### 🏛️ Administration Console
-
-A unified interface for institutional operations.
-
-- Manage students and faculty.
-- Organize courses and departments.
-- Review registration requests.
-- Monitor attendance analytics.
-- Resolve complaints.
-- Manage notices and events.
-- Access reports and system information.
-- Configure administrative settings.
-
----
-
-## 🤖 AI-Powered Campus Assistance
-
-AcadHub incorporates AI-oriented functionality to make campus information more accessible.
-
-Potential use cases include:
-
-- 💬 **Conversational Assistance:** Ask campus-related questions through an AI chat interface.
-- 🧠 **Information Discovery:** Make academic and campus information easier to navigate.
-- 📊 **Intelligent Insights:** Support the interpretation of academic information through analytics-oriented experiences.
-- 🚀 **Future Intelligence:** Extend the platform with predictive analytics and automated academic workflows.
-
-AI functionality may require an appropriately configured provider API key. Availability depends on the implemented integration and its configuration.
-
----
-
-## 🛠️ Technology Stack
-
-### Frontend
-
-| Technology | Purpose |
-|---|---|
-| ⚛️ React 18 | Component-based user interface |
-| 📘 TypeScript | Type-safe application development |
-| ⚡ Vite | Development server and build tooling |
-| 🎨 Tailwind CSS 3 | Utility-first styling |
-| 🧩 shadcn/ui and Radix UI | Interface components and accessible primitives |
-| 🧭 React Router | Client-side navigation |
-| 📡 TanStack Query | Server-state and data-fetching utilities |
-| 📈 Recharts | Data visualization |
-| ✨ Framer Motion | Interface animations |
-| 🎯 Lucide React | Icons |
-
-### Backend
-
-| Technology | Purpose |
-|---|---|
-| 🟢 Node.js | JavaScript runtime |
-| 🚂 Express.js | Backend HTTP and API infrastructure |
-| 🍃 MongoDB | Document-oriented database |
-| 🔑 JWT-based authentication | Token-based authentication where implemented |
-| 🔒 bcrypt | Password hashing where implemented |
-| 📁 Multer | Multipart file-upload handling |
-
-### Development and Testing
-
-- **Vite:** Frontend development and production builds.
-- **ESLint:** Static code-quality checks.
-- **Vitest:** Test execution.
-- **Playwright:** Browser automation and end-to-end testing infrastructure.
-- **Docker:** Client and server container definitions are included in the repository.
-- **GitHub Actions:** Workflow configuration is included in `.github/workflows`.
-
----
-
-## 🏗️ Project Architecture
-
-AcadHub separates its frontend, backend, documentation, and testing resources.
-
-```text
-AcadHub/
-│
-├── .github/
-│   └── workflows/           # CI workflow configuration
-│
-├── client/                  # Frontend application
-│
-├── server/                  # Backend application
-│   ├── index.mjs            # Backend entry point
-│   └── start-dev.mjs        # Development process launcher
-│
-├── docs/                    # Project documentation
-├── tests/                   # Test resources
-│
-├── .env.example             # Environment variable template
-├── Dockerfile.client        # Client container definition
-├── Dockerfile.server        # Server container definition
-├── docker-compose.yml       # Multi-service configuration
-├── package.json             # Dependencies and scripts
-├── vite.config.ts           # Vite configuration
-├── vitest.config.ts         # Vitest configuration
-└── README.md                # Project documentation
-```
-
-*Note: This is a simplified overview. Refer to the repository for the complete directory structure.*
-
----
-
-## 🚀 Getting Started
-
-Follow these steps to run AcadHub locally.
-
-### Prerequisites
-
-Install the following tools before starting:
-
-- [Node.js](https://nodejs.org/) — a compatible modern release.
-- npm — included with Node.js.
-- [MongoDB](https://www.mongodb.com/) — a local instance or a MongoDB Atlas connection.
-- [Git](https://git-scm.com/) — for cloning the repository.
-
-### 1. Clone the Repository
+### 1. Clone the repository
 
 ```bash
 git clone https://github.com/VarunB453/AcadHub.git
 cd AcadHub
 ```
 
-### 2. Install Dependencies
+### 2. Install dependencies
 
 ```bash
 npm install
 ```
 
-### 3. Configure Environment Variables
+### 3. Configure environment variables
 
-Create your local environment file by copying the provided template.
-
-**macOS / Linux / Git Bash**
+Create a local `.env` file from the example:
 
 ```bash
 cp .env.example .env
 ```
 
-**Windows Command Prompt**
+On Windows PowerShell, use:
 
-```cmd
-copy .env.example .env
+```powershell
+Copy-Item .env.example .env
 ```
 
-Open `.env` and configure the required values:
+Edit `.env` and set at least your MongoDB connection URI and a strong authentication secret. See [Environment variables](#-environment-variables) below.
 
-```env
-MONGODB_URI=mongodb://127.0.0.1:27017/acadhub
-AUTH_SECRET=replace_with_a_strong_random_secret
+### 4. Start MongoDB
+
+Make sure your MongoDB instance is running and the URI in `.env` points to it. For a typical local MongoDB installation, use:
+
+```dotenv
+MONGODB_URI=mongodb://127.0.0.1:27017
+```
+
+The backend uses `acadhub_management` as the default database name unless `MONGODB_DB_NAME` is set.
+
+### 5. Start the backend and frontend
+
+Open **two terminals** in the repository root.
+
+**Terminal 1 — API server**
+
+```bash
+npm run backend
+```
+
+The API listens on port `4000` by default.
+
+**Terminal 2 — frontend**
+
+```bash
+npm run frontend
+```
+
+Vite is configured to serve the frontend at [http://localhost:8080](http://localhost:8080) and proxy `/api` requests to the backend on port `4000`.
+
+### 6. Open the app
+
+Visit [http://localhost:8080](http://localhost:8080). The app uses role-based access, and new student/faculty registration requests require approval before the account can sign in.
+
+## 🔐 Environment variables
+
+The repository's `.env.example` includes the variables below. `MONGODB_DB_NAME` is also supported by the backend and is optional.
+
+| Variable | Required? | Purpose |
+| --- | --- | --- |
+| `MONGODB_URI` | Yes for database-backed features | MongoDB connection URI. |
+| `MONGODB_DB_NAME` | No | Database name; defaults to `acadhub_management`. |
+| `AUTH_SECRET` | Yes for secure deployments | Secret used by authentication helpers. Set a long, random value. |
+| `API_PORT` | No | API port; defaults to `4000` (the `PORT` environment variable takes precedence). |
+| `VITE_API_BASE_URL` | No for the local Vite proxy setup | Frontend API base path; use `/api` for local development. |
+| `GROQ_API_KEY` | Only for AI features | API key used by the AI assistant. |
+
+Example local configuration:
+
+```dotenv
+MONGODB_URI=mongodb://127.0.0.1:27017
+MONGODB_DB_NAME=acadhub_management
+AUTH_SECRET=replace-with-a-long-random-secret
 API_PORT=4000
 VITE_API_BASE_URL=/api
 GROQ_API_KEY=your_groq_api_key
 ```
 
-| Variable | Description |
-|---|---|
-| `MONGODB_URI` | MongoDB connection string |
-| `AUTH_SECRET` | Secret used by the authentication implementation |
-| `API_PORT` | Backend API port |
-| `VITE_API_BASE_URL` | Frontend API base path |
-| `GROQ_API_KEY` | API key for the Groq integration, if required |
+Do not commit your real `.env` file, production secrets, or API keys. The example values above are placeholders, not production credentials.
 
-**Configuration notes**
+## 🧪 Development commands
 
-- Replace all example credentials and secrets with appropriate values.
-- Obtain a Groq API key from [Groq Console](https://console.groq.com/) if the AI integration requires it.
-- Keep `.env` out of version control.
-- Frontend variables exposed through Vite must not contain server-side secrets.
+| Command | Description |
+| --- | --- |
+| `npm run frontend` | Start the Vite development server. |
+| `npm run backend` | Start the Node.js API server. |
+| `npm run build` | Build the frontend for production. |
+| `npm run build:dev` | Build using Vite's development mode. |
+| `npm run preview` | Preview the built frontend locally. |
+| `npm run lint` | Run ESLint. |
+| `npm test` | Run the Vitest test suite once. |
+| `npm run test:watch` | Run Vitest in watch mode. |
 
-### 4. Start the Application
+**Development launcher note:** `npm run dev` is intended to start both services, but the current launcher calls `npm run vite` while `package.json` defines the frontend script as `frontend`. Until that mismatch is corrected, use the two-terminal startup instructions above.
 
-Run the development command:
+## 🩺 API health check
+
+Once the backend is running, check its health endpoint:
 
 ```bash
-npm run dev
+curl http://localhost:4000/api/health
 ```
 
-The repository's development launcher starts the backend and frontend processes together.
+A successful response includes `ok: true`, the backend name, a running status, and a timestamp.
 
-The default development ports configured by the project are:
+## 📁 Project structure
 
-- **Frontend:** `http://localhost:5173`
-- **Backend API:** `http://localhost:4000`
+```text
+AcadHub/
+├── client/
+│   └── src/
+│       ├── components/       # Shared UI components
+│       ├── contexts/         # React contexts, including auth
+│       ├── integrations/     # MongoDB-facing client types/integration
+│       ├── layouts/          # Application layouts
+│       ├── pages/            # Route-level pages
+│       └── utils/            # Frontend helpers
+├── server/
+│   ├── config/               # Environment configuration
+│   ├── database/             # MongoDB connection and initialization
+│   ├── middleware/           # API middleware/auth helpers
+│   ├── routes/               # API route handlers
+│   ├── services/             # Domain and AI context services
+│   └── utils/                # Response and authentication helpers
+├── docs/                     # Project documentation/assets
+├── tests/                    # Tests
+├── .env.example
+├── Dockerfile.client
+├── Dockerfile.server
+├── docker-compose.yml
+├── package.json
+├── vite.config.ts
+└── README.md
+```
 
-Open the frontend address in your browser. Ensure MongoDB is running and the configured environment variables match the application code.
+## 🧹 Testing and code quality
 
-### 5. Other Useful Commands
+Run the checks from the repository root:
 
 ```bash
-# Start only the frontend development server
-npm run frontend
-
-# Start only the backend
-npm run backend
-
-# Build the frontend for production
-npm run build
-
-# Preview the production build
-npm run preview
-
-# Run the test suite
-npm test
-
-# Run tests in watch mode
-npm run test:watch
-
-# Check code quality
 npm run lint
+npm test
+npm run build
 ```
 
----
+GitHub Actions is configured to install dependencies, lint the project, and run tests on pushes and pull requests targeting the configured branches.
 
-## 🔐 Security Considerations
+## 🐳 Docker status
 
-AcadHub includes authentication-related functionality and server-side infrastructure. Before deploying it in a production environment, verify the following:
+The repository includes `Dockerfile.client`, `Dockerfile.server`, and `docker-compose.yml`. The current Compose settings should be aligned with the Vite configuration before relying on the Compose setup: Vite is configured for port `8080`, while Compose maps `5173:5173`, and the Compose frontend environment uses `VITE_API_URL` while the example configuration names `VITE_API_BASE_URL`. The manual workflow above is the documented local-development path.
 
-- 🔑 Passwords are hashed rather than stored as plaintext.
-- 🛡️ Protected endpoints enforce authorization on the server.
-- 👥 Role-based access checks prevent unauthorized administrative actions.
-- 🔒 Authentication secrets and third-party API keys remain server-side.
-- ✅ User input is validated and file uploads are restricted appropriately.
-- 🌐 Production traffic uses HTTPS.
-- 🗄️ Database access is restricted and backups are protected.
-- 🚫 Sensitive environment files are excluded from commits.
+## 🔒 Security notes
 
-These are security objectives and verification requirements, not a substitute for a security audit of the implementation.
-
----
-
-## 📸 Screenshots and Demo
-
-Visual examples help visitors understand the application before installing it.
-
-Add genuine screenshots of the implemented interfaces in `docs/screenshots/`, then embed them below.
-
-<!-- Replace the paths below with screenshots that exist in the repository. -->
-
-### 🔐 Authentication
-
-<!-- ![AcadHub Login](docs/screenshots/login.png) -->
-
-### 🎓 Student Dashboard
-
-<!-- ![Student Dashboard](docs/screenshots/student-dashboard.png) -->
-
-### 👨‍🏫 Faculty Dashboard
-
-<!-- ![Faculty Dashboard](docs/screenshots/faculty-dashboard.png) -->
-
-### 🏛️ Administration Dashboard
-
-<!-- ![Admin Dashboard](docs/screenshots/admin-dashboard.png) -->
-
-### 📊 Attendance and Analytics
-
-<!-- ![Attendance Analytics](docs/screenshots/attendance.png) -->
-
-*Screenshots are intentionally left as placeholders until actual application images are added.*
-
----
-
-## 🗺️ Development Roadmap
-
-Potential enhancements for future releases include:
-
-- [ ] 📈 Predictive attendance analytics.
-- [ ] 🧠 AI-assisted academic performance insights.
-- [ ] 📅 Intelligent timetable generation.
-- [ ] 👨‍👩‍👧 Parent or guardian portal.
-- [ ] 📱 Mobile-friendly application experience.
-- [ ] 📧 Email notification integration.
-- [ ] 🔔 Push notifications.
-- [ ] ☁️ Production cloud deployment.
-- [ ] 🐳 Improved containerized deployment and documentation.
-
-*Roadmap items indicate possible future work and should not be interpreted as currently implemented features.*
-
----
+- Use a strong, unique `AUTH_SECRET` outside local development.
+- Keep `.env` files and API credentials private.
+- Use HTTPS and appropriately restricted network access in a deployed environment.
+- Review authentication, registration approval, and password-reset flows before exposing the application publicly.
 
 ## 🤝 Contributing
 
-Contributions, suggestions, and bug reports are welcome.
-
-### Contribution Workflow
+Contributions and bug reports are welcome.
 
 1. Fork the repository.
-2. Create a feature branch.
-3. Implement and test your changes.
-4. Commit your changes with a descriptive message.
-5. Push your branch to your fork.
-6. Open a pull request describing the changes.
+2. Create a focused branch for your change.
+3. Run `npm run lint`, `npm test`, and `npm run build`.
+4. Open a pull request describing the change and any relevant testing.
 
-```bash
-git checkout -b feature/your-feature
-git add .
-git commit -m "feat: describe your change"
-git push origin feature/your-feature
-```
+For bugs or feature ideas, open an [issue](https://github.com/VarunB453/AcadHub/issues).
 
-For substantial changes, open an issue first to discuss the proposed implementation.
+## 📄 License
 
----
-
-## 👨‍💻 Author
-
-**VarunB453** — Creator and Developer of AcadHub.
-
-- GitHub: [@VarunB453](https://github.com/VarunB453)
-- Project: [AcadHub](https://github.com/VarunB453/AcadHub)
-
----
-
-## 🐛 Issues and Feedback
-
-Found a bug or have an idea for improving AcadHub?
-
-- [Report a bug or request a feature](https://github.com/VarunB453/AcadHub/issues/new)
-- [Browse the repository](https://github.com/VarunB453/AcadHub)
-- [Review the source code](https://github.com/VarunB453/AcadHub/tree/main)
-
-Please include clear reproduction steps, relevant error messages, and screenshots when reporting issues.
-
----
-
-## ⭐ Support the Project
-
-If AcadHub is useful to you, consider giving the repository a star.
-
-Your support helps increase visibility, encourages contributions, and motivates further development.
-
-<p align="center">
-  <a href="https://github.com/VarunB453/AcadHub">
-    <img src="https://img.shields.io/badge/Star-AcadHub-yellow?style=for-the-badge&logo=github&logoColor=black" alt="Star AcadHub on GitHub" />
-  </a>
-</p>
-
----
-
-<p align="center">
-  <strong>🎓 AcadHub — Making Campus Life More Connected.</strong>
-  <br />
-  <sub>Built to bring academic workflows into one unified digital experience.</sub>
-</p>
+No `LICENSE` file is currently present in the repository. Add a license file to make the terms for using, modifying, and distributing the project explicit.
