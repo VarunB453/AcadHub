@@ -1,11 +1,9 @@
 import { createServer } from "node:http";
-import fs from "node:fs";
-import path from "node:path";
-import { resolveUploadPath } from "./utils/uploadPaths.mjs";
 import { handleAnalytics } from "./routes/analytics.mjs";
 
 import {
   handleUpload,
+  handleUploadedFile,
 } from "./routes/upload.mjs";
 
 import {
@@ -46,31 +44,6 @@ import {
 } from "./routes/registrationRequests.mjs";
 
 /* =========================================
-   SERVE STATIC FILES
-========================================= */
-
-function serveStaticFile(req, res) {
-  const filePath = resolveUploadPath(req.url);
-  if (!filePath || !fs.existsSync(filePath) || !fs.statSync(filePath).isFile()) {
-    return false;
-  }
-
-  const contentTypes = {
-    ".png": "image/png",
-    ".jpg": "image/jpeg",
-    ".jpeg": "image/jpeg",
-    ".pdf": "application/pdf",
-  };
-  res.writeHead(200, {
-    "Content-Type": contentTypes[path.extname(filePath).toLowerCase()] || "application/octet-stream",
-    "X-Content-Type-Options": "nosniff",
-  });
-  fs.createReadStream(filePath).pipe(res);
-
-  return true;
-}
-
-/* =========================================
    SERVER
 ========================================= */
 
@@ -80,10 +53,6 @@ const server = createServer(async (req, res) => {
   }
 
   try {
-    if (serveStaticFile(req, res)) {
-      return;
-    }
-
     const url = new URL(
       req.url || "/",
       `http://${req.headers.host || "localhost"}`
@@ -101,6 +70,10 @@ const server = createServer(async (req, res) => {
       url.pathname === "/api/upload"
     ) {
       return await handleUpload(req, res);
+    }
+
+    if (pathParts[0] === "api" && pathParts[1] === "uploads") {
+      return await handleUploadedFile(req, res, pathParts.slice(2));
     }
 
     /* =========================================

@@ -24,6 +24,29 @@ const FileUpload = () => {
     setUploadedUrl,
   ] = useState("");
 
+  const downloadUploadedFile = async () => {
+    try {
+      const response = await fetch(uploadedUrl, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("acadhub_auth_token") || ""}`,
+        },
+      });
+
+      if (!response.ok) {
+        throw new Error("Unable to download uploaded file.");
+      }
+
+      const objectUrl = URL.createObjectURL(await response.blob());
+      const link = document.createElement("a");
+      link.href = objectUrl;
+      link.download = "acadhub-upload";
+      link.click();
+      URL.revokeObjectURL(objectUrl);
+    } catch (error: unknown) {
+      toast.error(error instanceof Error ? error.message : "Download failed.");
+    }
+  };
+
   /* =========================================
      HANDLE UPLOAD
   ========================================= */
@@ -124,13 +147,13 @@ const FileUpload = () => {
             Uploaded File:
           </p>
 
-          <a
-            href={uploadedUrl}
-            target="_blank"
+          <button
+            type="button"
+            onClick={downloadUploadedFile}
             className="text-blue-600 underline"
           >
-            View Uploaded File
-          </a>
+            Download Uploaded File
+          </button>
         </div>
       )}
     </div>
