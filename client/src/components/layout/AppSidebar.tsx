@@ -15,11 +15,8 @@ import {
   Megaphone,
   Calendar,
   BarChart3,
-  FileText,
   Upload,
   Settings,
-  LogOut,
-  Bot,
   ClipboardCheck,
   UserCheck,
 } from "lucide-react";
@@ -239,10 +236,6 @@ const AppSidebar = () => {
       ========================================= */}
       <div className="p-6 border-b border-sidebar-border">
         <div className="flex items-center gap-3">
-          <div className="w-10 h-10 rounded-xl bg-sidebar-primary flex items-center justify-center">
-            <GraduationCap className="w-6 h-6 text-sidebar-primary-foreground" />
-          </div>
-
           <div>
             <h1
               className="font-bold text-lg text-sidebar-primary-foreground"
@@ -278,15 +271,13 @@ const AppSidebar = () => {
                 key={item.path}
                 to={item.path}
                 className={cn(
-                  "flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-all duration-200",
+                  "flex items-center px-3 py-2.5 rounded-lg text-sm font-medium transition-all duration-200",
 
                   isActive
                     ? "bg-sidebar-primary text-sidebar-primary-foreground shadow-md"
                     : "text-sidebar-foreground/70 hover:bg-sidebar-accent hover:text-sidebar-accent-foreground"
                 )}
               >
-                <item.icon className="w-4.5 h-4.5" />
-
                 {item.label}
               </Link>
             );
@@ -317,10 +308,8 @@ const AppSidebar = () => {
         ========================================= */}
         <button
           onClick={signOut}
-          className="flex items-center gap-3 px-3 py-2 rounded-lg text-sm text-sidebar-foreground/60 hover:bg-sidebar-accent hover:text-sidebar-accent-foreground transition-colors w-full"
+          className="flex items-center px-3 py-2 rounded-lg text-sm text-sidebar-foreground/60 hover:bg-sidebar-accent hover:text-sidebar-accent-foreground transition-colors w-full"
         >
-          <LogOut className="w-4 h-4" />
-
           Sign Out
         </button>
       </div>
