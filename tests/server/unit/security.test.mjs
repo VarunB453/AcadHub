@@ -15,6 +15,8 @@ import { handleAI } from "../../../server/routes/ai.mjs";
 import { hasPermission } from "../../../server/utils/permissions.mjs";
 import { signToken, verifyToken } from "../../../server/utils/auth.mjs";
 import { resolveUploadPath } from "../../../server/utils/uploadPaths.mjs";
+import { filtersFromSearch, sortFromSearch } from "../../../server/utils/helpers.mjs";
+import { getPendingRequests } from "../../../server/services/approvalService.mjs";
 import { AUTH_SECRET } from "../../../server/config/env.mjs";
 import { createHmac } from "node:crypto";
 
@@ -58,6 +60,28 @@ describe("security regression checks", () => {
     expect(hasPermission({ roles: ["faculty"] }, "users", "read")).toBe(false);
     expect(hasPermission({ roles: ["faculty"] }, "users", "update")).toBe(false);
     expect(hasPermission({ roles: ["admin"] }, "users", "read")).toBe(true);
+  });
+
+  it("does not return stored password hashes with pending approvals", async () => {
+    const pending = [{ id: "request-1", password_hash: "redacted-hash", status: "pending" }];
+    getDb.mockResolvedValue({
+      collection: () => ({
+        find: () => ({ toArray: async () => pending }),
+      }),
+    });
+
+    const result = await getPendingRequests();
+
+    expect(result).toEqual([{ id: "request-1", status: "pending" }]);
+    expect(result[0]).not.toHaveProperty("password_hash");
+  });
+
+  it("ignores operator-shaped query and sort fields", () => {
+    const filters = filtersFromSearch(new URLSearchParams("filter_%24where=1"));
+    const sort = sortFromSearch(new URLSearchParams("sort=$natural:asc"));
+
+    expect(filters).toEqual({});
+    expect(sort).toEqual({});
   });
 
   it("does not allow password reset using only an email address", async () => {

@@ -26,11 +26,16 @@ export function sortFromSearch(searchParams) {
       .map((part) => {
         const [field, direction] = part.split(":");
 
+        if (!/^[A-Za-z_][A-Za-z0-9_]*$/.test(field)) {
+          return null;
+        }
+
         return [
           field,
           direction === "asc" ? 1 : -1,
         ];
       })
+      .filter(Boolean)
   );
 }
 
@@ -43,6 +48,9 @@ export function filtersFromSearch(searchParams) {
     }
 
     const field = key.slice("filter_".length);
+    if (!/^[A-Za-z_][A-Za-z0-9_]*$/.test(field)) {
+      continue;
+    }
 
     if (value.includes(",")) {
       filters[field] = {
