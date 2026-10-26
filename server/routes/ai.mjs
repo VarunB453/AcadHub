@@ -14,8 +14,6 @@ const GROQ_API_URL =
   "https://api.groq.com/openai/v1/chat/completions";
 
 export async function handleAI(req, res) {
-  console.log("\n========== AI REQUEST ==========");
-
   if (req.method !== "POST") {
     return sendError(
       res,
@@ -161,15 +159,7 @@ ${context}
     });
 
   } catch (error) {
-    console.error(
-      "\n======= SERVER ERROR ======="
-    );
-
-    console.error(error);
-
-    console.error(
-      "============================"
-    );
+    console.error("AI request failed.");
 
     return sendError(
       res,

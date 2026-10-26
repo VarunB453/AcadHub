@@ -8,12 +8,14 @@ export async function getPendingRequests() {
 
   const db = await getDb();
 
-  return db
+  const requests = await db
     .collection("registration_requests")
     .find({
       status: "pending",
     })
     .toArray();
+
+  return requests.map(({ password_hash, ...request }) => request);
 
 }
 /* =========================================

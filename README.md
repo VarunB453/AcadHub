@@ -162,6 +162,8 @@ GROQ_API_KEY=your_groq_api_key
 
 Do not commit your real `.env` file, production secrets, or API keys. The example values above are placeholders, not production credentials.
 
+In production, `AUTH_SECRET` must be at least 32 bytes or the API will refuse to start. Set `CLIENT_ORIGIN` to the exact frontend origin when the frontend and API use different origins. Self-service password recovery is disabled until an email-verified recovery workflow is configured; users must contact an administrator for account recovery.
+
 ## 🧪 Development commands
 
 | Command | Description |

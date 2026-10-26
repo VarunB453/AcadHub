@@ -6,6 +6,9 @@ export function send(res, status, body = null) {
     "Access-Control-Allow-Methods":
       "GET, POST, PATCH, PUT, DELETE, OPTIONS",
     "X-Content-Type-Options": "nosniff",
+    "Cache-Control": "no-store",
+    "X-Frame-Options": "DENY",
+    "Referrer-Policy": "no-referrer",
   };
   const allowedOrigin = process.env.CLIENT_ORIGIN ||
     (process.env.NODE_ENV === "production" ? null : "*");

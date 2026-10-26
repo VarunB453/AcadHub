@@ -24,7 +24,6 @@ export async function getDb() {
   console.log("✅ MongoDB Ping Successful");
 } catch (err) {
   console.error("❌ Mongo Connection Failed");
-  console.error(err);
   throw err;
 }
   }
