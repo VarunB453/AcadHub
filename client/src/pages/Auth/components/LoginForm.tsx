@@ -234,10 +234,15 @@ export default function LoginForm({
                     <div className="flex-1">
                       <p className={`font-semibold text-xs text-white group-hover:${color} transition-colors`}>{title}</p>
                       <p className="text-[10px] text-slate-500 mt-0.5">{description}</p>
+                      <p className="text-[9px] text-slate-400 mt-1">{DEMO_ACCOUNTS[role].email}</p>
                     </div>
                     <ChevronRight className="h-3.5 w-3.5 text-slate-600 group-hover:text-slate-400 transition-colors" />
                   </button>
                 ))}
+                <p className="rounded-lg border border-white/[0.07] bg-white/[0.03] px-3 py-2 text-[10px] text-slate-400">
+                  Shared demo password:{" "}
+                  <span className="font-semibold text-slate-200">AcadHub@Demo2026</span>
+                </p>
               </div>
             )}
 
