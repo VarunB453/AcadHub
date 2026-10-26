@@ -137,27 +137,33 @@ Visit [http://localhost:8080](http://localhost:8080). The app uses role-based ac
 
 ## 🔐 Environment variables
 
-The repository's `.env.example` includes the variables below. `MONGODB_DB_NAME` is also supported by the backend and is optional.
+The repository uses a single root `.env` file for both the frontend and backend. The server loads its variables from that file, and Vite exposes variables prefixed with `VITE_` to the frontend.
 
-| Variable | Required? | Purpose |
-| --- | --- | --- |
-| `MONGODB_URI` | Yes for database-backed features | MongoDB connection URI. |
-| `MONGODB_DB_NAME` | No | Database name; defaults to `acadhub_management`. |
-| `AUTH_SECRET` | Yes for secure deployments | Secret used by authentication helpers. Set a long, random value. |
-| `API_PORT` | No | API port; defaults to `4000` (the `PORT` environment variable takes precedence). |
-| `CLIENT_ORIGIN` | Required for cross-origin production deployments | Exact frontend origin allowed by the API; production requests receive no cross-origin permission when it is unset. |
-| `VITE_API_BASE_URL` | No for the local Vite proxy setup | Frontend API base path; use `/api` for local development. |
-| `GROQ_API_KEY` | Only for AI features | API key used by the AI assistant. |
+| Variable | Used by | Required? | Purpose |
+| --- | --- | --- | --- |
+| `MONGODB_URI` | Server | Yes for database-backed features | MongoDB connection URI. |
+| `MONGODB_DB_NAME` | Server | No | Database name; defaults to `acadhub_management`. |
+| `AUTH_SECRET` | Server | Yes in production | Secret used by authentication helpers. Set a random value of at least 32 bytes. Local development generates a temporary secret if unset. |
+| `API_PORT` | Server | No | API port; defaults to `4000` (`PORT` takes precedence). |
+| `CLIENT_ORIGIN` | Server | Required for cross-origin production deployments | Exact frontend origin allowed by the API; production requests receive no cross-origin permission when it is unset. |
+| `GROQ_API_KEY` | Server | Only for server-side AI features | API key used by the backend AI endpoint. |
+| `VITE_API_BASE_URL` | Client | No for the local Vite proxy setup | Frontend API base path; use `/api` for local development. |
+| `VITE_GROQ_API_KEY` | Client | Only for the client-side AI assistant | API key used by the browser-side AI assistant. This value is included in the frontend bundle and is visible to users; do not use a privileged or private key here. |
 
 Example local configuration:
 
 ```dotenv
+# Server
 MONGODB_URI=mongodb://127.0.0.1:27017
 MONGODB_DB_NAME=acadhub_management
 AUTH_SECRET=replace-with-a-long-random-secret
 API_PORT=4000
-VITE_API_BASE_URL=/api
+CLIENT_ORIGIN=http://localhost:8080
 GROQ_API_KEY=your_groq_api_key
+
+# Client
+VITE_API_BASE_URL=/api
+VITE_GROQ_API_KEY=your_groq_api_key
 ```
 
 Do not commit your real `.env` file, production secrets, or API keys. The example values above are placeholders, not production credentials.
