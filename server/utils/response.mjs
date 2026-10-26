@@ -10,8 +10,11 @@ export function send(res, status, body = null) {
     "X-Frame-Options": "DENY",
     "Referrer-Policy": "no-referrer",
   };
-  const allowedOrigin = process.env.CLIENT_ORIGIN ||
-    (process.env.NODE_ENV === "production" ? null : "*");
+  const configuredOrigin = process.env.CLIENT_ORIGIN?.replace(/\/+$/, "");
+  const allowedOrigin = configuredOrigin ||
+    (process.env.NODE_ENV === "production"
+      ? "https://acad-hub-eight.vercel.app"
+      : "*");
   if (allowedOrigin) {
     headers["Access-Control-Allow-Origin"] = allowedOrigin;
   }

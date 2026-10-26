@@ -80,7 +80,7 @@ export default function FacultyFields({
 
       <div className="space-y-2">
 
-        <Label className="flex items-center gap-2 text-slate-200">
+        <Label className="flex items-center gap-2 text-slate-700">
 
           <Building2 className="h-4 w-4" />
 
@@ -100,6 +100,7 @@ export default function FacultyFields({
 
           <SelectTrigger
             className="
+              auth-select-trigger
               h-12
               rounded-xl
               border-white/20
@@ -115,6 +116,7 @@ export default function FacultyFields({
 
           <SelectContent
             className="
+              auth-select-content
               bg-slate-900
               border-slate-700
               text-white

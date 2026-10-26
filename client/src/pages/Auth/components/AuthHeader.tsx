@@ -1,5 +1,3 @@
-import { GraduationCap } from "lucide-react";
-
 interface Props {
   title: string;
   description: string;
@@ -7,30 +5,16 @@ interface Props {
 
 export default function AuthHeader({ title, description }: Props) {
   return (
-    <div className="text-center mb-4">
-      {/* Glowing compact badge icon */}
-      <div className="relative inline-block mb-2">
-        <div className="absolute -inset-1 rounded-xl bg-gradient-to-r from-cyan-500 via-indigo-500 to-purple-600 blur-[6px] opacity-70" />
-        <div className="relative mx-auto w-10 h-10 rounded-xl bg-[#0B0F19] border border-white/20 flex items-center justify-center shadow-lg">
-          <GraduationCap className="w-5 h-5 text-cyan-400" />
-        </div>
-      </div>
-
-      {/* Brand name & Subtitle */}
-      <h1 className="text-xl font-extrabold tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-white via-slate-100 to-cyan-300">
+    <div className="auth-header mb-4 text-center">
+      <p className="text-[10px] font-semibold uppercase tracking-[0.2em] text-slate-500">
         AcadHub
-      </h1>
-      <p className="text-[10px] text-indigo-300/80 font-semibold tracking-wider uppercase mt-0.5">
-        AI Powered Campus Management
       </p>
-
-      {/* Active Form Mode Title */}
-      <div className="mt-2.5 pt-2.5 border-t border-white/[0.08]">
-        <h2 className="text-sm sm:text-base font-bold text-white flex items-center justify-center gap-1.5 leading-tight">
-          <span>{title}</span>
-          {title === "Welcome Back" && <span>👋</span>}
-        </h2>
-        <p className="text-[11px] text-slate-400 mt-0.5 leading-snug">
+      <div className="mt-2 border-b border-slate-200 pb-3">
+        <h1 className="text-sm font-bold uppercase tracking-wide text-slate-900">
+          {title === "Welcome Back" ? "Client Login" : title}
+        </h1>
+        <span className="mx-auto mt-2 block h-px w-10 bg-slate-900" />
+        <p className="mt-2 text-[11px] leading-snug text-slate-600">
           {description}
         </p>
       </div>

@@ -132,7 +132,7 @@ export default function LoginForm({
           <button
             type="button"
             onClick={onForgotPassword}
-            className="text-[10px] font-semibold text-cyan-400/90 hover:text-cyan-300 transition-colors hover:underline"
+            className="text-[10px] font-semibold             text-slate-600 hover:text-slate-900 transition-colors hover:underline"
           >
             Forgot Password?
           </button>
@@ -145,9 +145,9 @@ export default function LoginForm({
         disabled={loading}
         className="
           mt-1 w-full h-10 rounded-xl font-semibold text-xs sm:text-sm text-white
-          bg-gradient-to-r from-blue-600 via-indigo-600 to-cyan-500
-          shadow-[0_6px_20px_rgba(79,70,229,0.30)]
-          hover:shadow-[0_8px_25px_rgba(79,70,229,0.45)]
+          bg-[#171717]
+          shadow-sm
+          hover:bg-black
           hover:scale-[1.01] active:scale-[0.99]
           transition-all duration-200
           flex items-center justify-center gap-2
@@ -186,9 +186,9 @@ export default function LoginForm({
         disabled={loading}
         className="
           group w-full h-9 rounded-xl font-medium text-xs
-          border border-cyan-500/25 bg-cyan-500/[0.07] text-cyan-300
-          hover:border-cyan-400/50 hover:bg-cyan-500/15 hover:text-white
-          hover:shadow-[0_0_16px_rgba(6,182,212,0.12)]
+          border border-slate-300 bg-white text-slate-700
+          hover:border-slate-500 hover:bg-slate-50 hover:text-slate-950
+          hover:shadow-sm
           transition-all duration-200 flex items-center justify-center gap-1.5
           disabled:opacity-50 disabled:cursor-not-allowed
         "

@@ -1,14 +1,15 @@
+import { useState } from "react";
+import { Moon, Sun } from "lucide-react";
 import AuthHeader from "./components/AuthHeader";
 import RoleCards from "./components/RoleCards";
 import LoginForm from "./components/LoginForm";
 import SignupForm from "./components/SignupForm";
 import ForgotPasswordForm from "./components/ForgotPasswordForm";
-import HeroSection from "./components/HeroSection";
-import BackgroundBlobs from "./components/BackgroundBlobs";
 import { useAuthForm } from "./hooks/useAuthForm";
 import AuthTabs from "./components/AuthTabs";
 
 export default function AuthPage() {
+  const [theme, setTheme] = useState<"light" | "dark">("light");
   const {
     isLogin,
     isSignup,
@@ -38,111 +39,101 @@ export default function AuthPage() {
     : "Password recovery is not configured. Contact an administrator for assistance.";
 
   return (
-    <div className="relative min-h-screen overflow-hidden bg-[#070a12] text-white flex items-center justify-center py-10 px-4 sm:px-6 lg:px-8">
-      {/* Ambient background */}
-      <BackgroundBlobs />
+    <div
+      className="auth-page relative flex min-h-screen items-center justify-center overflow-hidden px-4 py-16 sm:px-6"
+      data-theme={theme}
+    >
+      <button
+        type="button"
+        onClick={() => setTheme((current) => current === "light" ? "dark" : "light")}
+        aria-label={`Switch to ${theme === "light" ? "dark" : "light"} theme`}
+        className={`absolute right-4 top-4 z-20 inline-flex h-10 items-center gap-2 rounded-md border px-3 text-xs font-semibold transition-colors sm:right-6 sm:top-6 ${
+          theme === "light"
+            ? "border-slate-300 bg-white text-slate-700 hover:bg-slate-50"
+            : "border-white/20 bg-white/10 text-white hover:bg-white/20"
+        }`}
+      >
+        {theme === "light" ? <Moon className="h-4 w-4" /> : <Sun className="h-4 w-4" />}
+        <span>{theme === "light" ? "Dark mode" : "Light mode"}</span>
+      </button>
 
-      <div className="relative z-10 w-full max-w-7xl mx-auto">
-        <div className="grid min-h-[90vh] items-center gap-12 lg:grid-cols-[1fr_460px]">
-          {/* ── Left: Hero Showcase ── */}
-          <HeroSection />
+      <div className="relative z-10 mx-auto w-full max-w-sm">
+        <div className="w-full">
+          <div className="auth-card relative overflow-hidden rounded-xl border shadow-[0_24px_70px_rgba(0,0,0,0.18)]">
+            <div className="h-1 w-full bg-[#171717]" />
 
-          {/* ── Right: Auth Card ── */}
-          <div className="w-full">
-            <div
-              className="
-                relative overflow-hidden rounded-2xl
-                border border-white/[0.09]
-                bg-[#0e1422]/80
-                backdrop-blur-2xl
-                shadow-[0_0_0_1px_rgba(255,255,255,0.04),0_32px_80px_rgba(0,0,0,0.60),0_0_60px_rgba(79,70,229,0.12)]
-              "
-            >
-              {/* Top gradient accent bar */}
-              <div className="h-[2px] w-full bg-gradient-to-r from-cyan-500 via-indigo-500 to-purple-500" />
+            <div className="p-5 sm:p-6">
+              <AuthHeader title={title} description={description} />
 
-              <div className="p-7 sm:p-8">
-                {/* Brand + Mode title */}
-                <AuthHeader title={title} description={description} />
+              {!isForgot && (
+                <>
+                  <AuthTabs
+                    isLogin={isLogin}
+                    isSignup={isSignup}
+                    selectedRole={selectedRole}
+                    switchMode={switchMode}
+                  />
 
-                {/* Only show tabs & role cards when not in forgot-password mode */}
-                {!isForgot && (
-                  <>
-                    {/* Login / Register switcher */}
-                    <AuthTabs
-                      isLogin={isLogin}
-                      isSignup={isSignup}
+                  <div className="mb-4">
+                    <p className="mb-1.5 text-[10px] font-bold uppercase tracking-widest text-slate-500">
+                      Select Account Role
+                    </p>
+                    <RoleCards
                       selectedRole={selectedRole}
-                      switchMode={switchMode}
+                      onChange={setSelectedRole}
+                      disableAdminSignup={isSignup}
                     />
+                  </div>
+                </>
+              )}
 
-                    {/* Role selector */}
-                    <div className="mb-5">
-                      <p className="text-[10px] font-bold uppercase tracking-widest text-slate-500 mb-2">
-                        Select Account Role
-                      </p>
-                      <RoleCards
-                        selectedRole={selectedRole}
-                        onChange={setSelectedRole}
-                        disableAdminSignup={isSignup}
-                      />
-                    </div>
-                  </>
+              {isForgot && (
+                <button
+                  type="button"
+                  onClick={() => switchMode("login")}
+                  className="mb-5 flex items-center gap-1.5 text-xs text-slate-600 transition-colors hover:underline"
+                >
+                  ← Back to Sign In
+                </button>
+              )}
+
+              <form onSubmit={handleSubmit} className="mt-2">
+                {isLogin && (
+                  <LoginForm
+                    form={form}
+                    loading={loading}
+                    updateField={updateField}
+                    onForgotPassword={() => switchMode("forgot")}
+                    onExploreDemo={handleExploreDemo}
+                  />
                 )}
 
-                {/* Forgot password back link */}
-                {isForgot && (
-                  <button
-                    type="button"
-                    onClick={() => switchMode("login")}
-                    className="flex items-center gap-1.5 text-xs text-cyan-400 hover:text-cyan-300 hover:underline mb-5 transition-colors"
-                  >
-                    ← Back to Sign In
-                  </button>
+                {isSignup && (
+                  <SignupForm
+                    form={form}
+                    updateField={updateField}
+                    selectedRole={selectedRole}
+                    departments={departments}
+                    loading={loading}
+                    captcha={captcha}
+                  />
                 )}
 
-                {/* Active form */}
-                <form onSubmit={handleSubmit} className="mt-2">
-                  {isLogin && (
-                    <LoginForm
-                      form={form}
-                      loading={loading}
-                      updateField={updateField}
-                      onForgotPassword={() => switchMode("forgot")}
-                      onExploreDemo={handleExploreDemo}
-                    />
-                  )}
-
-                  {isSignup && (
-                    <SignupForm
-                      form={form}
-                      updateField={updateField}
-                      selectedRole={selectedRole}
-                      departments={departments}
-                      loading={loading}
-                      captcha={captcha}
-                    />
-                  )}
-
-                  {isForgot && (
-                    <ForgotPasswordForm />
-                  )}
-                </form>
-              </div>
+                {isForgot && <ForgotPasswordForm />}
+              </form>
             </div>
 
-            {/* Footer note */}
-            <p className="text-center text-[11px] text-slate-600 mt-4">
-              By continuing, you agree to AcadHub's{" "}
-              <span className="text-slate-500 cursor-pointer hover:text-slate-300 transition-colors">
-                Terms of Service
-              </span>{" "}
-              &{" "}
-              <span className="text-slate-500 cursor-pointer hover:text-slate-300 transition-colors">
-                Privacy Policy
-              </span>
-            </p>
           </div>
+          <p className="auth-footer mt-4 text-center text-[11px]">
+            By continuing, you agree to AcadHub's{" "}
+            <span className="cursor-pointer transition-colors hover:underline">
+              Terms of Service
+            </span>{" "}
+            &{" "}
+            <span className="cursor-pointer transition-colors hover:underline">
+              Privacy Policy
+            </span>
+          </p>
         </div>
       </div>
     </div>

@@ -107,3 +107,73 @@
     font-family: 'Space Grotesk', sans-serif;
   }
 }
+
+.auth-page {
+  transition: background-color 200ms ease;
+}
+
+.auth-page[data-theme="light"] {
+  background-color: #f4f4f5;
+  color: #171717;
+}
+
+.auth-page[data-theme="dark"] {
+  background-color: #151515;
+  color: #fff;
+}
+
+.auth-card {
+  border-color: #e5e5e5;
+  background-color: #fff;
+  color: #171717;
+}
+
+.auth-card input {
+  border: 0;
+  border-bottom: 1px solid #d4d4d4;
+  border-radius: 0;
+  background: transparent;
+  color: #171717;
+}
+
+.auth-card input::placeholder {
+  color: #a3a3a3;
+}
+
+.auth-card input:focus {
+  border-bottom-color: #171717;
+  background: transparent;
+  box-shadow: none;
+}
+
+.auth-card .auth-select-trigger {
+  border-color: #d4d4d4;
+  background-color: #fff;
+  color: #171717;
+}
+
+.auth-select-content {
+  background-color: #171717;
+  color: #fff;
+}
+
+.auth-card button[type="submit"] {
+  border: 0;
+  border-radius: 0;
+  background-color: #171717;
+  background-image: none;
+  color: #fff;
+  box-shadow: none;
+}
+
+.auth-card button[type="submit"]:hover {
+  background-color: #333;
+}
+
+.auth-footer {
+  color: #a3a3a3;
+}
+
+.auth-page[data-theme="light"] .auth-footer {
+  color: #737373;
+}

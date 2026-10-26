@@ -16,16 +16,16 @@ export default function AuthTabs({
   const isAdminSignupDisabled = selectedRole === "admin";
 
   return (
-    <div className="relative flex rounded-xl border border-white/[0.08] bg-white/[0.03] p-0.5 mb-3 gap-1">
+    <div className="auth-tabs relative mb-3 flex gap-1 rounded-md border border-slate-200 bg-slate-100 p-0.5">
       <button
         type="button"
         onClick={() => switchMode("login")}
         className={`
-          flex-1 flex items-center justify-center gap-1.5 h-8 sm:h-8.5 rounded-lg text-xs font-semibold transition-all duration-300
+          flex-1 flex items-center justify-center gap-1.5 h-8 rounded-sm text-xs font-semibold transition-all duration-300
           ${
             isLogin
-              ? "bg-gradient-to-r from-indigo-600 via-blue-600 to-cyan-500 text-white shadow-md shadow-indigo-500/25"
-              : "text-slate-400 hover:text-white hover:bg-white/[0.05]"
+              ? "bg-[#171717] text-white"
+              : "text-slate-500 hover:text-slate-900 hover:bg-white"
           }
         `}
       >
@@ -38,11 +38,11 @@ export default function AuthTabs({
         disabled={isAdminSignupDisabled}
         onClick={() => switchMode("signup")}
         className={`
-          flex-1 flex items-center justify-center gap-1.5 h-8 sm:h-8.5 rounded-lg text-xs font-semibold transition-all duration-300
+          flex-1 flex items-center justify-center gap-1.5 h-8 rounded-sm text-xs font-semibold transition-all duration-300
           ${
             isSignup
-              ? "bg-gradient-to-r from-indigo-600 via-blue-600 to-cyan-500 text-white shadow-md shadow-indigo-500/25"
-              : "text-slate-400 hover:text-white hover:bg-white/[0.05]"
+              ? "bg-[#171717] text-white"
+              : "text-slate-500 hover:text-slate-900 hover:bg-white"
           }
           ${isAdminSignupDisabled ? "opacity-40 cursor-not-allowed" : "cursor-pointer"}
         `}

@@ -145,7 +145,7 @@ The repository uses a single root `.env` file for both the frontend and backend.
 | `MONGODB_DB_NAME` | Server | No | Database name; defaults to `acadhub_management`. |
 | `AUTH_SECRET` | Server | Yes in production | Secret used by authentication helpers. Set a random value of at least 32 bytes. Local development generates a temporary secret if unset. |
 | `API_PORT` | Server | No | API port; defaults to `4000` (`PORT` takes precedence). |
-| `CLIENT_ORIGIN` | Server | Required for cross-origin production deployments | Exact frontend origin allowed by the API; production requests receive no cross-origin permission when it is unset. |
+| `CLIENT_ORIGIN` | Server | No | Exact frontend origin allowed by the API; defaults to `https://acad-hub-eight.vercel.app` in production and `*` in development. |
 | `GROQ_API_KEY` | Server | Only for server-side AI features | API key used by the backend AI endpoint. |
 | `VITE_API_BASE_URL` | Client | No for the local Vite proxy setup | Frontend API base path; use `/api` for local development. |
 | `VITE_GROQ_API_KEY` | Client | Only for the client-side AI assistant | API key used by the browser-side AI assistant. This value is included in the frontend bundle and is visible to users; do not use a privileged or private key here. |
@@ -168,7 +168,7 @@ VITE_GROQ_API_KEY=your_groq_api_key
 
 Do not commit your real `.env` file, production secrets, or API keys. The example values above are placeholders, not production credentials.
 
-In production, `AUTH_SECRET` must be at least 32 bytes or the API will refuse to start. Set `VITE_API_BASE_URL` at frontend build time to the backend URL ending in `/api` when the frontend and API use different origins, and set the backend's `CLIENT_ORIGIN` to the exact frontend origin (scheme and host, without a trailing slash). Self-service password recovery is disabled until an email-verified recovery workflow is configured; users must contact an administrator for account recovery.
+In production, `AUTH_SECRET` must be at least 32 bytes or the API will refuse to start. Set `VITE_API_BASE_URL` at frontend build time to the backend URL ending in `/api` when the frontend and API use different origins. The backend allows `https://acad-hub-eight.vercel.app` by default; set `CLIENT_ORIGIN` to a different exact frontend origin (scheme and host, without a trailing slash) if needed. Self-service password recovery is disabled until an email-verified recovery workflow is configured; users must contact an administrator for account recovery.
 
 ## 🧪 Development commands
 

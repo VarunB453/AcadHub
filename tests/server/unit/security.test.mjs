@@ -17,6 +17,7 @@ import { signToken, verifyToken } from "../../../server/utils/auth.mjs";
 import { resolveUploadPath } from "../../../server/utils/uploadPaths.mjs";
 import { filtersFromSearch, sortFromSearch } from "../../../server/utils/helpers.mjs";
 import { getPendingRequests } from "../../../server/services/approvalService.mjs";
+import { send } from "../../../server/utils/response.mjs";
 import { AUTH_SECRET } from "../../../server/config/env.mjs";
 import { createHmac } from "node:crypto";
 
@@ -54,6 +55,39 @@ describe("security regression checks", () => {
       .toBe("/tmp/uploads/123e4567-e89b-12d3-a456-426614174000.pdf");
     expect(resolveUploadPath("/uploads/../../.env", "/tmp/uploads")).toBeNull();
     expect(resolveUploadPath("/uploads/%2e%2e/%2e%2e/.env", "/tmp/uploads")).toBeNull();
+  });
+
+  it("normalizes a trailing slash from the configured CORS origin", () => {
+    const originalClientOrigin = process.env.CLIENT_ORIGIN;
+    const originalNodeEnv = process.env.NODE_ENV;
+    delete process.env.CLIENT_ORIGIN;
+    process.env.NODE_ENV = "production";
+
+    try {
+      const res = responseDouble();
+      send(res, 204);
+
+      expect(res.headers["Access-Control-Allow-Origin"])
+        .toBe("https://acad-hub-eight.vercel.app");
+
+      process.env.CLIENT_ORIGIN = "https://acad-hub-eight.vercel.app/";
+      const configuredRes = responseDouble();
+      send(configuredRes, 204);
+
+      expect(configuredRes.headers["Access-Control-Allow-Origin"])
+        .toBe("https://acad-hub-eight.vercel.app");
+    } finally {
+      if (originalClientOrigin === undefined) {
+        delete process.env.CLIENT_ORIGIN;
+      } else {
+        process.env.CLIENT_ORIGIN = originalClientOrigin;
+      }
+      if (originalNodeEnv === undefined) {
+        delete process.env.NODE_ENV;
+      } else {
+        process.env.NODE_ENV = originalNodeEnv;
+      }
+    }
   });
 
   it("restricts user-record access and modification to admins", () => {
