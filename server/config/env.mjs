@@ -21,30 +21,34 @@ const AUTH_SECRET = process.env.AUTH_SECRET || randomBytes(32).toString("base64u
 const TOKEN_TTL_SECONDS = 60 * 60 * 24 * 7;
 
 function loadEnv() {
-  try {
-    const env = readFileSync(".env", "utf8");
+  const envPaths = [".env", "server/.env"];
 
-    for (const line of env.split(/\r?\n/)) {
-      const trimmed = line.trim();
+  for (const envPath of envPaths) {
+    try {
+      const env = readFileSync(envPath, "utf8");
 
-      if (!trimmed || trimmed.startsWith("#")) continue;
+      for (const line of env.split(/\r?\n/)) {
+        const trimmed = line.trim();
 
-      const separator = trimmed.indexOf("=");
+        if (!trimmed || trimmed.startsWith("#")) continue;
 
-      if (separator === -1) continue;
+        const separator = trimmed.indexOf("=");
 
-      const key = trimmed.slice(0, separator).trim();
+        if (separator === -1) continue;
 
-      const value = trimmed
-        .slice(separator + 1)
-        .trim()
-        .replace(/^["']|["']$/g, "");
+        const key = trimmed.slice(0, separator).trim();
 
-      if (!(key in process.env))
-        process.env[key] = value;
+        const value = trimmed
+          .slice(separator + 1)
+          .trim()
+          .replace(/^['"]|['"]$/g, "");
+
+        if (!(key in process.env))
+          process.env[key] = value;
+      }
+    } catch {
+      // Ignore missing env files and let runtime env vars take precedence.
     }
-  } catch {
-    // Ignore if .env doesn't exist
   }
 }
 
