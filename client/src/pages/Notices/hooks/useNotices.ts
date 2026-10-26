@@ -27,7 +27,10 @@ export function useNotices() {
     queryFn: () => dbApi.list(COLLECTION as any) as Promise<Notice[]>,
   });
 
-  const notices = noticesQuery.data ?? [];
+  const notices = useMemo(
+    () => noticesQuery.data ?? [],
+    [noticesQuery.data],
+  );
 
   const filteredNotices = useMemo(() => {
     return notices.filter((notice) => {

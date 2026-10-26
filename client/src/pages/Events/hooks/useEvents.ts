@@ -42,8 +42,10 @@ export function useEvents() {
       ) as Promise<Event[]>,
   });
 
-  const events =
-    eventsQuery.data ?? [];
+  const events = useMemo(
+    () => eventsQuery.data ?? [],
+    [eventsQuery.data],
+  );
 
   /* =========================================
       FILTER EVENTS
