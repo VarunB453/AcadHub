@@ -52,9 +52,12 @@ const FileUpload = () => {
 
         const response =
           await fetch(
-            "http://127.0.0.1:4000/api/upload",
+            `${import.meta.env.VITE_API_BASE_URL || "/api"}/upload`,
             {
               method: "POST",
+              headers: {
+                Authorization: `Bearer ${localStorage.getItem("acadhub_auth_token") || ""}`,
+              },
               body: formData,
             }
           );

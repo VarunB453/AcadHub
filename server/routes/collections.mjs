@@ -63,11 +63,6 @@ export async function handleCollection(
 
   const user = await getAuthUser(req);
 
-  console.log(
-    "Authenticated user:",
-    user
-  );
-
   const isPublicDepartments =
     req.method === "GET" &&
     collection === "departments";

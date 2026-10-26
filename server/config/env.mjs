@@ -1,4 +1,5 @@
 import { readFileSync } from "node:fs";
+import { randomBytes } from "node:crypto";
 
 loadEnv();
 
@@ -9,9 +10,14 @@ const PORT = Number(
 );
 const MONGODB_URI = process.env.MONGODB_URI;
 const DB_NAME = process.env.MONGODB_DB_NAME || "acadhub_management";
-const AUTH_SECRET =
-  process.env.AUTH_SECRET ||
-  "replace-this-secret-before-production";
+if (
+  process.env.NODE_ENV === "production" &&
+  (!process.env.AUTH_SECRET || Buffer.byteLength(process.env.AUTH_SECRET) < 32)
+) {
+  throw new Error("AUTH_SECRET must contain at least 32 bytes in production.");
+}
+
+const AUTH_SECRET = process.env.AUTH_SECRET || randomBytes(32).toString("base64url");
 const TOKEN_TTL_SECONDS = 60 * 60 * 24 * 7;
 
 function loadEnv() {

@@ -8,8 +8,14 @@ import {
 import {
   PORT,
 } from "../config/env.mjs";
+import { getAuthUser } from "../middleware/authMiddleware.mjs";
 
-export function handleUpload(req, res) {
+export async function handleUpload(req, res) {
+  const user = await getAuthUser(req);
+  if (!user) {
+    return sendError(res, 401, "Authentication required.");
+  }
+
   upload.single("file")(req, res, (err) => {
     if (err) {
       return sendError(

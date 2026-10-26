@@ -32,15 +32,30 @@ export function signToken(user) {
 }
 
 export function verifyToken(token) {
+  if (typeof token !== "string") return null;
+
   const [encodedPayload, signature] = token.split(".");
   if (!encodedPayload || !signature) return null;
   const expected = createHmac("sha256", AUTH_SECRET).update(encodedPayload).digest("base64url");
   const expectedBuffer = Buffer.from(expected);
   const signatureBuffer = Buffer.from(signature);
   if (expectedBuffer.length !== signatureBuffer.length || !timingSafeEqual(expectedBuffer, signatureBuffer)) return null;
-  const payload = JSON.parse(Buffer.from(encodedPayload, "base64url").toString("utf8"));
-  if (!payload.exp || payload.exp < Math.floor(Date.now() / 1000)) return null;
-  return payload;
+
+  try {
+    const payload = JSON.parse(Buffer.from(encodedPayload, "base64url").toString("utf8"));
+    if (
+      !payload ||
+      typeof payload.sub !== "string" ||
+      !Number.isFinite(payload.exp) ||
+      payload.exp <= Math.floor(Date.now() / 1000)
+    ) {
+      return null;
+    }
+
+    return payload;
+  } catch {
+    return null;
+  }
 }
 
 export async function hashPassword(password) {

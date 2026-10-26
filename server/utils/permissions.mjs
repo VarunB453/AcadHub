@@ -233,9 +233,9 @@ const collectionPermissions = {
   },
 
   users: {
-    read: ["admin", "faculty"],
+    read: ["admin"],
     create: [],
-    update: ["admin", "faculty"],
+    update: ["admin"],
   },
 
   departments: {

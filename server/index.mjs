@@ -1,5 +1,7 @@
 import { createServer } from "node:http";
 import fs from "node:fs";
+import path from "node:path";
+import { resolveUploadPath } from "./utils/uploadPaths.mjs";
 import { handleAnalytics } from "./routes/analytics.mjs";
 
 import {
@@ -48,16 +50,21 @@ import {
 ========================================= */
 
 function serveStaticFile(req, res) {
-  if (!req.url.startsWith("/uploads/")) {
+  const filePath = resolveUploadPath(req.url);
+  if (!filePath || !fs.existsSync(filePath) || !fs.statSync(filePath).isFile()) {
     return false;
   }
 
-  const filePath = "." + req.url;
-
-  if (!fs.existsSync(filePath)) {
-    return false;
-  }
-
+  const contentTypes = {
+    ".png": "image/png",
+    ".jpg": "image/jpeg",
+    ".jpeg": "image/jpeg",
+    ".pdf": "application/pdf",
+  };
+  res.writeHead(200, {
+    "Content-Type": contentTypes[path.extname(filePath).toLowerCase()] || "application/octet-stream",
+    "X-Content-Type-Options": "nosniff",
+  });
   fs.createReadStream(filePath).pipe(res);
 
   return true;
@@ -68,7 +75,6 @@ function serveStaticFile(req, res) {
 ========================================= */
 
 const server = createServer(async (req, res) => {
-  console.log("Incoming request:", req.method, req.url);
   if (req.method === "OPTIONS") {
     return send(res, 204);
   }
@@ -82,8 +88,6 @@ const server = createServer(async (req, res) => {
       req.url || "/",
       `http://${req.headers.host || "localhost"}`
     );
-    console.log("Parsed pathname:", url.pathname);
-
     const pathParts = url.pathname
       .split("/")
       .filter(Boolean);
@@ -96,7 +100,7 @@ const server = createServer(async (req, res) => {
       req.method === "POST" &&
       url.pathname === "/api/upload"
     ) {
-      return handleUpload(req, res);
+      return await handleUpload(req, res);
     }
 
     /* =========================================
@@ -190,12 +194,12 @@ if (pathParts[0] !== "api") {
     }
 
   } catch (error) {
-    console.error(error);
+    console.error("Request failed.");
 
     return sendError(
       res,
       500,
-      error.message || "Internal server error."
+      "Internal server error."
     );
   }
 });

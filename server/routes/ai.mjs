@@ -8,6 +8,7 @@ import { detectIntent } from "../utils/aiIntent.mjs";
 import { getStudentContext } from "../services/studentAITool.mjs";
 import { getFacultyContext } from "../services/facultyAITool.mjs";
 import { getAttendanceContext } from "../services/attendanceAITool.mjs";
+import { getAuthUser } from "../middleware/authMiddleware.mjs";
 
 const GROQ_API_URL =
   "https://api.groq.com/openai/v1/chat/completions";
@@ -24,10 +25,15 @@ export async function handleAI(req, res) {
   }
 
   try {
+    const user = await getAuthUser(req);
+    if (!user) {
+      return sendError(res, 401, "Authentication required.");
+    }
+
     const { message } =
       await parseBody(req);
 
-    if (!message?.trim()) {
+    if (typeof message !== "string" || !message.trim()) {
       return sendError(
         res,
         400,
@@ -35,48 +41,31 @@ export async function handleAI(req, res) {
       );
     }
 
-    console.log("User:", message);
+    if (message.length > 4000) {
+      return sendError(res, 413, "Message is too long.");
+    }
 
     const intent =
       detectIntent(message);
-
-    console.log("Intent:", intent);
 
     let context = "";
 
     switch (intent) {
       case "students": {
         context =
-          await getStudentContext();
-        console.log("\n===== STUDENT CONTEXT =====");
-        console.log(context);
-        console.log("===========================\n");
+          await getStudentContext(user);
 
         break;
       }
       case "faculty": {
         context =
-          await getFacultyContext();
-
-        console.log(
-          "\n===== FACULTY CONTEXT ====="
-        );
-
-        console.log(context);
-
-        console.log(
-          "===========================\n"
-        );
+          await getFacultyContext(user);
 
         break;
       }
 
       case "attendance": {
-        context = await getAttendanceContext();
-
-        console.log("\n===== ATTENDANCE CONTEXT =====");
-        console.log(context);
-        console.log("==============================\n");
+        context = await getAttendanceContext(user);
 
         break;
       }
@@ -151,24 +140,6 @@ ${context}
     );
 
     if (!response.ok) {
-      const error =
-        await response.text();
-
-      console.log(
-        "\n======= GROQ ERROR ======="
-      );
-
-      console.log(
-        "Status:",
-        response.status
-      );
-
-      console.log(error);
-
-      console.log(
-        "=========================="
-      );
-
       return sendError(
         res,
         response.status,
@@ -183,16 +154,6 @@ ${context}
       data.choices?.[0]?.message
         ?.content ??
       "No response generated.";
-
-    console.log(
-      "\n======= GROQ SUCCESS ======="
-    );
-
-    console.log(reply);
-
-    console.log(
-      "============================"
-    );
 
     return send(res, 200, {
       success: true,

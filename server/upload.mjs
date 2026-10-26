@@ -1,6 +1,7 @@
 import multer from "multer";
 import fs from "node:fs";
 import path from "node:path";
+import { randomUUID } from "node:crypto";
 
 /* =========================================
    CREATE UPLOADS DIRECTORY
@@ -27,15 +28,14 @@ const storage = multer.diskStorage({
     file,
     cb
   ) => {
-    const uniqueName =
-      Date.now() +
-      "-" +
-      file.originalname;
+    const extensions = {
+      "image/png": ".png",
+      "image/jpeg": ".jpg",
+      "image/jpg": ".jpg",
+      "application/pdf": ".pdf",
+    };
 
-    cb(
-      null,
-      uniqueName
-    );
+    cb(null, `${randomUUID()}${extensions[file.mimetype]}`);
   },
 });
 

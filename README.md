@@ -145,6 +145,7 @@ The repository's `.env.example` includes the variables below. `MONGODB_DB_NAME` 
 | `MONGODB_DB_NAME` | No | Database name; defaults to `acadhub_management`. |
 | `AUTH_SECRET` | Yes for secure deployments | Secret used by authentication helpers. Set a long, random value. |
 | `API_PORT` | No | API port; defaults to `4000` (the `PORT` environment variable takes precedence). |
+| `CLIENT_ORIGIN` | Required for cross-origin production deployments | Exact frontend origin allowed by the API; production requests receive no cross-origin permission when it is unset. |
 | `VITE_API_BASE_URL` | No for the local Vite proxy setup | Frontend API base path; use `/api` for local development. |
 | `GROQ_API_KEY` | Only for AI features | API key used by the AI assistant. |
 

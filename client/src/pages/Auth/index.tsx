@@ -35,7 +35,7 @@ export default function AuthPage() {
     ? "Sign in to continue to your campus portal."
     : isSignup
     ? "Join AcadHub to access your personalized portal."
-    : "Enter your email to reset your password.";
+    : "Password recovery is not configured. Contact an administrator for assistance.";
 
   return (
     <div className="relative min-h-screen overflow-hidden bg-[#070a12] text-white flex items-center justify-center py-10 px-4 sm:px-6 lg:px-8">
@@ -125,12 +125,7 @@ export default function AuthPage() {
                   )}
 
                   {isForgot && (
-                    <ForgotPasswordForm
-                      form={form}
-                      loading={loading}
-                      updateField={updateField}
-                      captcha={captcha}
-                    />
+                    <ForgotPasswordForm />
                   )}
                 </form>
               </div>

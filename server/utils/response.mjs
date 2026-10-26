@@ -1,13 +1,19 @@
 export function send(res, status, body = null) {
-  res.writeHead(status, {
+  const headers = {
     "Content-Type": "application/json",
-    "Access-Control-Allow-Origin":
-      process.env.CLIENT_ORIGIN || "*",
     "Access-Control-Allow-Headers":
       "Content-Type, Authorization",
     "Access-Control-Allow-Methods":
       "GET, POST, PATCH, PUT, DELETE, OPTIONS",
-  });
+    "X-Content-Type-Options": "nosniff",
+  };
+  const allowedOrigin = process.env.CLIENT_ORIGIN ||
+    (process.env.NODE_ENV === "production" ? null : "*");
+  if (allowedOrigin) {
+    headers["Access-Control-Allow-Origin"] = allowedOrigin;
+  }
+
+  res.writeHead(status, headers);
 
   res.end(
     body === null

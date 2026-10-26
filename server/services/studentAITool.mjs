@@ -1,31 +1,27 @@
 import { getDb } from "../database/mongodb.mjs";
 
-export async function getStudentContext() {
+export async function getStudentContext(user) {
   const db = await getDb();
+  const roles = user?.roles || [];
+  const isStudentOnly = roles.includes("student") &&
+    !roles.includes("admin") &&
+    !roles.includes("faculty");
 
-  // Fetch students
   const students = await db
     .collection("students")
-    .find({})
+    .find(isStudentOnly ? { user_id: user.id } : {})
     .toArray();
 
-  // Fetch departments
   const departments = await db
     .collection("departments")
     .find({})
     .toArray();
 
-  // Create Department ID -> Name map
   const departmentMap = new Map(
     departments.map((department) => [
       department.id,
       department.name,
     ])
-  );
-
-  console.log(
-    "Students Found:",
-    students.length
   );
 
   if (students.length === 0) {

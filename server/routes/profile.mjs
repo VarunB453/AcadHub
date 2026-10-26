@@ -49,11 +49,6 @@ export async function handleProfile(req, res) {
         avatar_url,
       } = await parseBody(req);
 
-      console.log("PATCH BODY:", {
-  full_name,
-  phone,
-});
-
       const profile = {
         ...user.profile,
 
@@ -89,11 +84,6 @@ export async function handleProfile(req, res) {
       }
     );
 
-console.log(
-  "UPDATE RESULT:",
-  result
-);
-
       const updatedUser =
         await database
           .collection("users")
@@ -119,10 +109,7 @@ console.log(
       "Method not allowed."
     );
   } catch (error) {
-    console.error(
-      "Profile Route Error:",
-      error
-    );
+    console.error("Profile route failed.");
 
     return sendError(
       res,

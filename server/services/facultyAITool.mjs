@@ -20,11 +20,6 @@ export async function getFacultyContext() {
     ])
   );
 
-  console.log(
-    "Faculty Found:",
-    faculty.length
-  );
-
   if (faculty.length === 0) {
     return `
 No faculty members are currently available

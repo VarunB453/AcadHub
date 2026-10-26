@@ -266,50 +266,11 @@ export async function handleAuth(req, res, pathParts) {
     req.method === "POST" &&
     pathParts[2] === "forgot-password"
   ) {
-    const {
-      email,
-      password,
-    } = await parseBody(req);
-
-    if (!email || !password) {
-      return sendError(
-        res,
-        400,
-        "Email and new password are required."
-      );
-    }
-
-    if (String(password).length < 6) {
-      return sendError(
-        res,
-        400,
-        "Password must be at least 6 characters."
-      );
-    }
-
-    const result = await users.updateOne(
-      {
-        email: String(email).toLowerCase(),
-      },
-      {
-        $set: {
-          password_hash: await hashPassword(password),
-          updated_at: new Date().toISOString(),
-        },
-      }
+    return sendError(
+      res,
+      410,
+      "Password recovery is not configured. Contact an administrator for assistance."
     );
-
-    if (result.matchedCount === 0) {
-      return sendError(
-        res,
-        404,
-        "No account found for this email."
-      );
-    }
-
-    return send(res, 200, {
-      ok: true,
-    });
   }
 
   /* =========================================

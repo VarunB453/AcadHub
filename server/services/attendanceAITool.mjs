@@ -1,16 +1,20 @@
 import { getDb } from "../database/mongodb.mjs";
 
-export async function getAttendanceContext() {
+export async function getAttendanceContext(user) {
   const db = await getDb();
+  const roles = user?.roles || [];
+  const isStudentOnly = roles.includes("student") &&
+    !roles.includes("admin") &&
+    !roles.includes("faculty");
 
   const attendance = await db
     .collection("attendance")
-    .find({})
+    .find(isStudentOnly ? { student_user_id: user.id } : {})
     .toArray();
 
   const students = await db
     .collection("students")
-    .find({})
+    .find(isStudentOnly ? { user_id: user.id } : {})
     .toArray();
 
   if (attendance.length === 0) {
