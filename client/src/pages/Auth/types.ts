@@ -1,4 +1,12 @@
-import type { AppRole } from "@/integrations/mongodb/types";
+import type {
+  AppRole,
+  Department,
+} from "@/integrations/mongodb/types";
+
+export type DepartmentOption = Pick<
+  Department,
+  "id" | "name" | "code"
+>;
 
 export type AuthMode =
   | "login"

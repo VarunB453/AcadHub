@@ -70,41 +70,26 @@ async function initializeDatabase() {
     ),
   ]);
 
-  const departmentCount =
-    await db.collection("departments").countDocuments();
+  const now = new Date().toISOString();
+  const defaultDepartments = [
+    { name: "Computer Science", code: "CSE" },
+    { name: "Electronics", code: "ECE" },
+    { name: "Mechanical", code: "ME" },
+    { name: "Civil", code: "CE" },
+  ];
 
-  if (departmentCount === 0) {
-    const now = new Date().toISOString();
-
-    await db.collection("departments").insertMany([
+  for (const department of defaultDepartments) {
+    await db.collection("departments").updateOne(
+      { code: department.code },
       {
-        id: randomUUID(),
-        name: "Computer Science",
-        code: "CSE",
-        head_name: null,
-        created_at: now,
+        $setOnInsert: {
+          id: randomUUID(),
+          ...department,
+          head_name: null,
+          created_at: now,
+        },
       },
-      {
-        id: randomUUID(),
-        name: "Electronics",
-        code: "ECE",
-        head_name: null,
-        created_at: now,
-      },
-      {
-        id: randomUUID(),
-        name: "Mechanical",
-        code: "ME",
-        head_name: null,
-        created_at: now,
-      },
-      {
-        id: randomUUID(),
-        name: "Civil",
-        code: "CE",
-        head_name: null,
-        created_at: now,
-      },
-    ]);
+      { upsert: true }
+    );
   }
 }

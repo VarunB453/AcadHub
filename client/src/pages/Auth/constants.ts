@@ -1,4 +1,6 @@
-import type { AppRole } from "@/integrations/mongodb/types";
+import type {
+  AppRole,
+} from "@/integrations/mongodb/types";
 import {
   BriefcaseBusiness,
   ShieldCheck,
@@ -6,6 +8,7 @@ import {
 } from "lucide-react";
 
 import type {
+  DepartmentOption,
   SignupFormData,
 } from "./types";
 
@@ -42,6 +45,13 @@ export const ROLE_OPTIONS: {
     label: "Admin",
     icon: ShieldCheck,
   },
+];
+
+export const REGISTRATION_DEPARTMENTS: DepartmentOption[] = [
+  { id: "CSE", name: "Computer Science", code: "CSE" },
+  { id: "ECE", name: "Electronics", code: "ECE" },
+  { id: "ME", name: "Mechanical", code: "ME" },
+  { id: "CE", name: "Civil", code: "CE" },
 ];
 
 /* =========================================

@@ -90,6 +90,23 @@ export async function handleAuth(req, res, pathParts) {
       );
     }
 
+    const department = departmentId
+      ? await database.collection("departments").findOne({
+          $or: [
+            { id: departmentId },
+            { code: departmentId },
+          ],
+        })
+      : null;
+
+    if (departmentId && !department) {
+      return sendError(
+        res,
+        400,
+        "Please select a valid department."
+      );
+    }
+
     const now = new Date().toISOString();
 
     const request = {
@@ -128,7 +145,7 @@ export async function handleAuth(req, res, pathParts) {
         mobile || null,
 
       department_id:
-        departmentId || null,
+        department?.id || null,
 
       /* Workflow */
 

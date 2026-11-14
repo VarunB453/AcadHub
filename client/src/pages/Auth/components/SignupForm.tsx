@@ -223,8 +223,10 @@ import { Button } from "@/components/ui/button";
 import AuthInput from "./AuthInput";
 import { BadgeCheck, Mail, Lock, User } from "lucide-react";
 
-import type { Department } from "@/integrations/mongodb/types";
-import type { SignupFormData } from "../types";
+import type {
+  DepartmentOption,
+  SignupFormData,
+} from "../types";
 
 import StudentFields from "./StudentFields";
 import FacultyFields from "./FacultyFields";
@@ -246,7 +248,9 @@ interface SignupFormProps {
     "faculty" |
     "admin";
 
-    departments: Department[];
+    departments: DepartmentOption[];
+
+    departmentsLoading: boolean;
 
     loading: boolean;
 
@@ -277,6 +281,7 @@ export default function SignupForm({
     selectedRole,
 
     departments,
+    departmentsLoading,
 
     loading,
 
@@ -351,6 +356,7 @@ export default function SignupForm({
       <StudentFields
         form={form}
         departments={departments}
+        departmentsLoading={departmentsLoading}
         updateField={updateField}
       />
     )}
@@ -359,6 +365,7 @@ export default function SignupForm({
       <FacultyFields
         form={form}
         departments={departments}
+        departmentsLoading={departmentsLoading}
         updateField={updateField}
       />
     )}

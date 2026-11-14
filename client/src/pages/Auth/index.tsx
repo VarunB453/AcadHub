@@ -19,6 +19,7 @@ export default function AuthPage() {
     form,
     updateField,
     departments,
+    departmentsLoading,
     loading,
     captcha,
     switchMode,
@@ -114,6 +115,7 @@ export default function AuthPage() {
                     updateField={updateField}
                     selectedRole={selectedRole}
                     departments={departments}
+                    departmentsLoading={departmentsLoading}
                     loading={loading}
                     captcha={captcha}
                   />

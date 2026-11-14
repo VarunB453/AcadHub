@@ -18,17 +18,16 @@ import {
 } from "@/components/ui/select";
 
 import type {
-  Department,
-} from "@/integrations/mongodb/types";
-
-import type {
+  DepartmentOption,
   SignupFormData,
 } from "../types";
 
 interface StudentFieldsProps {
   form: SignupFormData;
 
-  departments: Department[];
+  departments: DepartmentOption[];
+
+  departmentsLoading: boolean;
 
   updateField: <
     K extends keyof SignupFormData
@@ -41,6 +40,7 @@ interface StudentFieldsProps {
 export default function StudentFields({
   form,
   departments,
+  departmentsLoading,
   updateField,
 }: StudentFieldsProps) {
   return (
@@ -150,6 +150,7 @@ export default function StudentFields({
 
         <Select
           value={form.departmentId}
+          disabled={departmentsLoading || departments.length === 0}
           onValueChange={(value)=>
             updateField(
               "departmentId",
@@ -170,7 +171,15 @@ export default function StudentFields({
             "
           >
 
-            <SelectValue placeholder="Select Department" />
+            <SelectValue
+              placeholder={
+                departmentsLoading
+                  ? "Loading departments..."
+                  : departments.length === 0
+                    ? "No departments available"
+                    : "Select Department"
+              }
+            />
 
           </SelectTrigger>
 

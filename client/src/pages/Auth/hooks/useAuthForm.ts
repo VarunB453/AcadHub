@@ -11,16 +11,17 @@ import {
 
 import type {
   AppRole,
-  Department,
 } from "@/integrations/mongodb/types";
 
 import {
   ADMIN_EMAIL,
   DEFAULT_FORM,
+  REGISTRATION_DEPARTMENTS,
 } from "../constants";
 
 import type {
   AuthMode,
+  DepartmentOption,
   SignupFormData,
 } from "../types";
 
@@ -98,7 +99,13 @@ export function useAuthForm() {
     departments,
     setDepartments,
   ] =
-    useState<Department[]>([]);
+    useState<DepartmentOption[]>([]);
+
+  const [
+    departmentsLoading,
+    setDepartmentsLoading,
+  ] =
+    useState(true);
 
   /* =========================================
      CAPTCHA
@@ -124,16 +131,26 @@ export function useAuthForm() {
             );
 
           setDepartments(
-            data
+            data.length > 0
+              ? data
+              : REGISTRATION_DEPARTMENTS
           );
 
         } catch (error) {
 
           console.error(error);
 
+          setDepartments(
+            REGISTRATION_DEPARTMENTS
+          );
+
           toast.error(
             "Unable to load departments."
           );
+
+        } finally {
+
+          setDepartmentsLoading(false);
 
         }
 
@@ -535,6 +552,7 @@ export function useAuthForm() {
     loading,
 
     departments,
+    departmentsLoading,
 
     captcha,
 
